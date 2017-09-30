@@ -4,6 +4,7 @@ public class ResultBean
 {
 	/**
 	 * 200 : 正常返回
+	 * 403 : 用户名错误或密码错误
 	 * 404 : Token Key不存在
 	 * 405 : Token 不合法
 	 */
@@ -67,6 +68,14 @@ public class ResultBean
 		ResultBean result = new ResultBean();
 		result.setCode(200);
 		result.setMessgae("返回值正常");
+		return result;
+	}
+	
+	public static ResultBean userNotExist()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(403);
+		result.setMessgae("用户名错误或密码错误");
 		return result;
 	}
 }

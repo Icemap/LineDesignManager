@@ -16,12 +16,12 @@ import redis.clients.jedis.Jedis;
 @Service
 public class TokenServiceImpl implements TokenService
 {
-	Jedis jedis;
-	String TOKEN_HEADER;
-	Integer TOKEN_LIFE_TIME;
+	private Jedis jedis;
+	private String TOKEN_HEADER;
+	private Integer TOKEN_LIFE_TIME;
 	
 	@PostConstruct
-	private void onInit()
+	public void onInit()
 	{
         jedis = new Jedis("wangqizhi.top");
         TOKEN_HEADER = "TOKEN-";
@@ -29,7 +29,7 @@ public class TokenServiceImpl implements TokenService
 	}
 	
 	@PreDestroy
-	private void onDestory()
+	public void onDestory()
 	{
 		jedis.close();
 	}
@@ -49,7 +49,7 @@ public class TokenServiceImpl implements TokenService
 		String d_token = jedis.get(TOKEN_HEADER + id);
 		if(d_token == null || d_token.isEmpty())
 			return ResultBean.tokenKeyNotExist();
-		else if(d_token.equals(token))
+		else if(!d_token.equals(token))
 			return ResultBean.tokenKeyNotValid();
 		return ResultBean.tokenKeyValidNotSetResult();
 	}

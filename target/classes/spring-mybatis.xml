@@ -55,6 +55,7 @@
         <property name="dataSource" ref="basedataSource" />
     </bean> 
     
+	<!-- 
 	<bean id="setting"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
@@ -62,7 +63,7 @@
 				<value>classpath:setting.properties</value>
 			</list>
 		</property>
-		<!-- 设置编码格式 -->
 		<property name="fileEncoding" value="UTF-8"></property>
-	</bean>
+	</bean> 
+	-->
 </beans>

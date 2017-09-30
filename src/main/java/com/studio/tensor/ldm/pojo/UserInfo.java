@@ -2,6 +2,8 @@ package com.studio.tensor.ldm.pojo;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.studio.tensor.ldm.utils.HashUtils;
+
 public class UserInfo {
     private Integer id;
 
@@ -38,6 +40,11 @@ public class UserInfo {
         this.password = password == null ? null : password.trim();
     }
 
+    public void setHashPassword(String password)
+    {
+    	setPassword(HashUtils.getMD5(password));
+    }
+    
     public Integer getRoleId() {
         return roleId;
     }
