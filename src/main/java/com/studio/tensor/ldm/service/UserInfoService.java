@@ -5,7 +5,7 @@ import com.studio.tensor.ldm.pojo.UserInfo;
 
 public interface UserInfoService
 {
-	ResultBean userLogin(String account, String password);
+	ResultBean userLogin(String account, String password, String apiKey);
 	ResultBean userRegister(String account, String password);
-	ResultBean userUpdate(UserInfo userInfo, String token);
+	ResultBean userUpdate(UserInfo userInfo, String token, String apiKey);
 }

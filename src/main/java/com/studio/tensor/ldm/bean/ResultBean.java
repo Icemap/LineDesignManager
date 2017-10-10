@@ -4,12 +4,13 @@ public class ResultBean
 {
 	/**
 	 * 200 : 正常返回
+	 * 401 : 用户权限不足
 	 * 403 : 用户名错误或密码错误
-	 * 404 : Token Key不存在
 	 * 405 : Token 不合法
+	 * 406 : 非管理员身份
 	 */
 	private Integer code;
-	private String messgae;
+	private String message;
 	private Object resultBean;
 	
 	public Integer getCode()
@@ -20,14 +21,6 @@ public class ResultBean
 	{
 		this.code = code;
 	}
-	public String getMessgae()
-	{
-		return messgae;
-	}
-	public void setMessgae(String messgae)
-	{
-		this.messgae = messgae;
-	}
 	public Object getResultBean()
 	{
 		return resultBean;
@@ -37,19 +30,11 @@ public class ResultBean
 		this.resultBean = resultBean;
 	}
 	
-	public static ResultBean tokenKeyNotExist()
-	{
-		ResultBean result = new ResultBean();
-		result.setCode(404);
-		result.setMessgae("用户未曾登录或登录已经过期。");
-		return result;
-	}
-	
 	public static ResultBean tokenKeyNotValid()
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(405);
-		result.setMessgae("用户Token非法");
+		result.setMessage("用户Token非法");
 		return result;
 	}
 
@@ -57,7 +42,7 @@ public class ResultBean
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(200);
-		result.setMessgae("返回值正常");
+		result.setMessage("返回值正常");
 		result.setResultBean(resultBean);
 		return result;
 	}
@@ -67,7 +52,7 @@ public class ResultBean
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(200);
-		result.setMessgae("返回值正常");
+		result.setMessage("返回值正常");
 		return result;
 	}
 	
@@ -75,7 +60,32 @@ public class ResultBean
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(403);
-		result.setMessgae("用户名错误或密码错误");
+		result.setMessage("用户名错误或密码错误");
 		return result;
+	}
+
+	public static ResultBean isNotAdmin()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(406);
+		result.setMessage("非管理员身份");
+		return result;
+	}
+	
+	public static ResultBean permissionDenied()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(401);
+		result.setMessage("用户权限不足");
+		return result;
+	}
+	
+	public String getMessage()
+	{
+		return message;
+	}
+	public void setMessage(String message)
+	{
+		this.message = message;
 	}
 }

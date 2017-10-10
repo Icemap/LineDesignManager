@@ -19,15 +19,20 @@ public class UserInfoServiceImpl implements UserInfoService
 	@Autowired
 	UserInfoMapper userInfoMapper;
 	
+	@Autowired
+	RoleInfoServiceImpl roleInfoServiceImpl;
+	
 	@Override
-	public ResultBean userLogin(String account, String password)
+	public ResultBean userLogin(String account, String password, String apiKey)
 	{
 		UserInfo userInfo = userInfoMapper.userLogin(account, HashUtils.getMD5(password));
-		
 		if(userInfo == null) return ResultBean.userNotExist();
+		if(!roleInfoServiceImpl.hasPermission(userInfo.getRoleId(), apiKey))
+			return ResultBean.permissionDenied();
 		
-		String token = tokenServiceImpl.loginSetAndReturnToken(userInfo.getId());
-		tokenServiceImpl.refleshKeyLifeTime(userInfo.getId());
+		String token = tokenServiceImpl.loginSetAndReturnToken(userInfo.getId(),
+				userInfo.getRoleId());
+		tokenServiceImpl.refleshKeyLifeTime(token);
 		
 		LoginResult loginResult = new LoginResult();
 		loginResult.setUserInfo(userInfo);
@@ -47,11 +52,13 @@ public class UserInfoServiceImpl implements UserInfoService
 	}
 
 	@Override
-	public ResultBean userUpdate(UserInfo userInfo, String token)
+	public ResultBean userUpdate(UserInfo userInfo, String token, String apiKey)
 	{
-		ResultBean resultBean = tokenServiceImpl.confirmToken(userInfo.getId(), token);
-		if(resultBean.getCode() == 200)
-			resultBean.setResultBean(userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1);
-		return resultBean;
+		if(tokenServiceImpl.confirmToken(token))
+			return ResultBean.tokenKeyValid(userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1);
+		if(!roleInfoServiceImpl.hasPermission(userInfo.getRoleId(), apiKey))
+			return ResultBean.permissionDenied();
+		
+		return ResultBean.tokenKeyNotValid();
 	}
 }

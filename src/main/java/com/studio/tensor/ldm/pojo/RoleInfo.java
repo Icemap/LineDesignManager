@@ -7,6 +7,8 @@ public class RoleInfo {
 
     private String des;
 
+    private String apiJson;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class RoleInfo {
 
     public void setDes(String des) {
         this.des = des == null ? null : des.trim();
+    }
+
+    public String getApiJson() {
+        return apiJson;
+    }
+
+    public void setApiJson(String apiJson) {
+        this.apiJson = apiJson == null ? null : apiJson.trim();
     }
 }

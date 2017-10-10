@@ -7,7 +7,6 @@ import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Service;
 
-import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.service.TokenService;
 import com.studio.tensor.ldm.utils.HashUtils;
 
@@ -17,14 +16,12 @@ import redis.clients.jedis.Jedis;
 public class TokenServiceImpl implements TokenService
 {
 	private Jedis jedis;
-	private String TOKEN_HEADER;
 	private Integer TOKEN_LIFE_TIME;
 	
 	@PostConstruct
 	public void onInit()
 	{
         jedis = new Jedis("wangqizhi.top");
-        TOKEN_HEADER = "TOKEN-";
         TOKEN_LIFE_TIME = 1800;
 	}
 	
@@ -35,28 +32,30 @@ public class TokenServiceImpl implements TokenService
 	}
 	
 	@Override
-	public String loginSetAndReturnToken(Integer id)
+	public String loginSetAndReturnToken(Integer id, Integer roleId)
 	{
 		String tokenRaw = new Date().getTime() + "" + Math.random();
 		String token = HashUtils.getMD5(tokenRaw);
-		jedis.set(TOKEN_HEADER + id, token);
+		jedis.set(token, roleId + "");
 		return token;
 	}
 
 	@Override
-	public ResultBean confirmToken(Integer id, String token)
+	public Boolean confirmToken(String token)
 	{
-		String d_token = jedis.get(TOKEN_HEADER + id);
-		if(d_token == null || d_token.isEmpty())
-			return ResultBean.tokenKeyNotExist();
-		else if(!d_token.equals(token))
-			return ResultBean.tokenKeyNotValid();
-		return ResultBean.tokenKeyValidNotSetResult();
+		return jedis.exists(token);
 	}
 
 	@Override
-	public void refleshKeyLifeTime(Integer id)
+	public void refleshKeyLifeTime(String token)
 	{
-		jedis.expire(TOKEN_HEADER + id, TOKEN_LIFE_TIME);
+		jedis.expire(token, TOKEN_LIFE_TIME);
+	}
+
+	@Override
+	public Integer confirmTokenAndReturnRoleId(String token)
+	{
+		if(!jedis.exists(token)) return null;
+		return Integer.parseInt(jedis.get(token));
 	}
 }
