@@ -1,6 +1,6 @@
 package com.studio.tensor.ldm.utils;
 
-public class AngelUtils
+public class AnglelUtils
 {
 	public static double getAngle(Double cLon, Double cLat,
 			Double sLon, Double sLat, Double eLon, Double eLat)
