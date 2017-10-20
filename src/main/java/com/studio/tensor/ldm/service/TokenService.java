@@ -6,4 +6,7 @@ public interface TokenService
 	Boolean confirmToken(String token);
 	Integer confirmTokenAndReturnRoleId(String token);
 	void refleshKeyLifeTime(String token);
+	
+	String getRegisterCode(String key);
+	Boolean compareRegisterCode(String key, String code);
 }

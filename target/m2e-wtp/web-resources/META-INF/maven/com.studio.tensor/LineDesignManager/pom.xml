@@ -43,6 +43,11 @@
             <id>mvn-repo</id>
             <url>http://maven.ansj.org/</url>
         </repository>
+        
+        <repository>
+	        <id>jitpack.io</id>
+	        <url>https://jitpack.io</url>
+	    </repository>
 	</repositories>
 
 	<dependencies>
@@ -193,7 +198,7 @@
 		    <artifactId>commons-httpclient</artifactId>
 		    <version>3.1</version>
 		</dependency>
-	
+        
 		<dependency>
 			<groupId>javax.media</groupId>
 			<artifactId>jai_codec</artifactId>
@@ -254,20 +259,22 @@
 	    <version>2.9.0</version>
 	</dependency>
 	
-	
+	<!-- 支付SDK -->
 	<dependency>
-	    <groupId>org.mitre.dsmiley.httpproxy</groupId>
-	    <artifactId>smiley-http-proxy-servlet</artifactId>
-	    <version>1.6</version>
+	    <groupId>com.alipay</groupId>
+	    <artifactId>sdk.java</artifactId>
+	    <version>20171012102412</version>
 	</dependency>
-
+	
+	<!-- 阿里大于短信SDK -->
 	<dependency>
-	    <groupId>com.google.guava</groupId>
-	    <artifactId>guava</artifactId>
-	    <version>21.0</version>
+	    <groupId>com.alipay</groupId>
+	    <artifactId>sdk.java.message</artifactId>
+	    <version>1455552377940</version>
 	</dependency>
 	
   </dependencies>
+  
   <build>
     <finalName>LineDesignManager</finalName>
   </build>
