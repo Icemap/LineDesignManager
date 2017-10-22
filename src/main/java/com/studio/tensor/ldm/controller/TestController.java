@@ -1,10 +1,6 @@
 package com.studio.tensor.ldm.controller;
 
-import java.io.IOException;
 import java.util.Date;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.studio.tensor.ldm.bean.FileSetting;
-import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.utils.FileUtils;
 
 @Controller

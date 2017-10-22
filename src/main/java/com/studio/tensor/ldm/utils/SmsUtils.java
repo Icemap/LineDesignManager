@@ -15,7 +15,7 @@ public class SmsUtils
 {
 	//正式环境：http://gw.api.taobao.com/router/rest
 	//沙箱环境：http://gw.api.tbsandbox.com/router/rest
-	private static Boolean isRelease = false;
+	private static Boolean isRelease = true;
 	private static String releaseUrl = "http://gw.api.taobao.com/router/rest";
 	private static String debugUrl = "http://gw.api.tbsandbox.com/router/rest";
 	private static String appKey = "23951870";//待更改

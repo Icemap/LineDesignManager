@@ -24,8 +24,8 @@ public class SmsServiceImpl implements SmsService
 	@PostConstruct
 	public void onInit()
 	{
-		signName = "";
-		registerTemplateCode = "";
+		signName = "王琦智";
+		registerTemplateCode = "SMS_105720045";
 	}
 	
 	@Override

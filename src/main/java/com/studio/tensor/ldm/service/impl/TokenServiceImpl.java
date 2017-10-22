@@ -18,6 +18,7 @@ public class TokenServiceImpl implements TokenService
 	private Jedis jedis;
 	private Integer TOKEN_LIFE_TIME;
 	private Integer REGISTER_CODE_LIFE_TIME;
+	private String SMS_PHONE_KEY_HEADER;
 	
 	@PostConstruct
 	public void onInit()
@@ -25,6 +26,7 @@ public class TokenServiceImpl implements TokenService
         jedis = new Jedis("wangqizhi.top");
         TOKEN_LIFE_TIME = 1800;
         REGISTER_CODE_LIFE_TIME = 600;
+        SMS_PHONE_KEY_HEADER = "PHONE_";
 	}
 	
 	@PreDestroy
@@ -64,10 +66,11 @@ public class TokenServiceImpl implements TokenService
 	@Override
 	public String getRegisterCode(String key)
 	{
+		key = SMS_PHONE_KEY_HEADER + key;
 		String timeStamp = new Date().getTime() + "";
 		String code = timeStamp.substring(
-				timeStamp.length() - 5, timeStamp.length());
-		code += (int)(Math.random() * 10);
+				timeStamp.length() - 3, timeStamp.length());
+		code += (int)(Math.random() * 900 + 100);
 		
 		jedis.set(key, code);
 		jedis.expire(key, REGISTER_CODE_LIFE_TIME);
@@ -77,8 +80,12 @@ public class TokenServiceImpl implements TokenService
 	@Override
 	public Boolean compareRegisterCode(String key, String code)
 	{
+		key = SMS_PHONE_KEY_HEADER + key;
 		if(jedis.exists(key) && jedis.get(key).equals(code))
+		{
+			jedis.del(key);
 			return true;
+		}
 		else
 			return false;
 	}
