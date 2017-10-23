@@ -24,7 +24,7 @@ public class SmsServiceImpl implements SmsService
 	@PostConstruct
 	public void onInit()
 	{
-		signName = "王琦智";
+		signName = "线路设计助手";
 		registerTemplateCode = "SMS_105720045";
 	}
 	
