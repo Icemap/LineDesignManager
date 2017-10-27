@@ -1,9 +1,5 @@
 package com.studio.tensor.ldm.digging;
 
-import org.junit.Test;
-
-import com.google.gson.Gson;
-
 public class PolygonAlgorithm
 {
 
@@ -37,28 +33,20 @@ public class PolygonAlgorithm
 		}
 		points[points.length - 1].isCCW = 
 				isCCW(points[points.length - 2],
-				points[points.length - 2], points[0]);
+				points[points.length - 1], points[0]);
 		
 		return points;
 	}
 	
-	@Test
-	public void test()
+	public static void reversePoints(CoordinateInfo[] points)
 	{
-		CoordinateInfo[] coorInfoList = 
+		CoordinateInfo temp = new CoordinateInfo();
+		for(int i = 0;i < points.length / 2; i++)
 		{
-			new CoordinateInfo(0.0, -1.0),
-			new CoordinateInfo(0.0, 0.0),
-			new CoordinateInfo(1.0, 1.0)
-		};
-		
-		CoordinateInfo[] reverseCoorInfoList = 
-		{
-			new CoordinateInfo(1.0, 1.0),
-			new CoordinateInfo(0.0, 0.0),
-			new CoordinateInfo(0.0, -1.0)
-		};
-		
-		System.out.println(new Gson().toJson(setPointsIsCCWProp(reverseCoorInfoList)));
+			temp = points[i];
+			points[i] = points[points.length - 1 - i];
+			points[points.length - 1 - i] = temp;
+		}
 	}
+	
 }

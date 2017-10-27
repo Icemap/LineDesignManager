@@ -19,6 +19,24 @@ public class LineMethodInfo
 		this.endPoint = endPoint;
 	}
 	
+	public LineMethodInfo clone()
+	{
+		LineMethodInfo result = new LineMethodInfo();
+		result.b = this.b;
+		result.k = this.k;
+		result.startPoint = this.startPoint;
+		result.endPoint = this.endPoint;
+		return result;
+	}
+	
+	public void setAll(LineMethodInfo m)
+	{
+		this.b = m.b;
+		this.k = m.k;
+		this.startPoint = m.startPoint;
+		this.endPoint = m.endPoint;
+	}
+	
 	public Double getK()
 	{
 		return k;
@@ -44,9 +62,13 @@ public class LineMethodInfo
 	 */
 	public void moveToSelfAxesLeft(Double Distance)
 	{
-		Boolean isReverse = startPoint.y > endPoint.y;
-		this.b += Math.sin(Math.PI / 4 - Math.atan(this.k)) 
-				* Distance * (isReverse ? -1 : 1);
+		VectorInfo vectorInfo = 
+				new VectorInfo(endPoint.x - startPoint.x, endPoint.y - startPoint.y)
+				.init()
+				.turnLeft90()
+				.multiply(Distance);
+		setAll(new LineMethodInfo(startPoint.clone().addVector(vectorInfo),
+				endPoint.clone().addVector(vectorInfo)));
 	}
 	
 	public CoordinateInfo getCrossPoint(LineMethodInfo line2)
