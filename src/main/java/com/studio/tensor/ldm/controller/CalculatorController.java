@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.LatLngInfo;
+import com.studio.tensor.ldm.digging.CoordinateInfo;
+import com.studio.tensor.ldm.digging.PolygonInfo;
 import com.studio.tensor.ldm.utils.AnglelUtils;
 import com.studio.tensor.ldm.utils.CoodUtils;
 
@@ -118,4 +120,17 @@ public class CalculatorController
 		
 		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/digging/polygon")
+	public PolygonInfo polygonDigging(String sTopPointList,
+			Boolean isCCW, Double slopeCoefficient, Double depth)
+	{
+		CoordinateInfo[] topPointList = 
+				new Gson().fromJson(sTopPointList, CoordinateInfo[].class);
+		Double dis = slopeCoefficient * depth;
+		return new PolygonInfo(topPointList, isCCW, dis, depth);
+	}
+	
+	
 }

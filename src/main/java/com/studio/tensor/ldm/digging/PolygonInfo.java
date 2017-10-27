@@ -12,6 +12,15 @@ public class PolygonInfo
 	private CoordinateInfo[] bottomPointList;
 	private LineMethodInfo[] topLineList;
 	private List<LineMethodInfo> bottomLineList;
+	private Double volume;
+	
+	public PolygonInfo(CoordinateInfo[] topPointList, Boolean isCCW,
+			Double dis, Double depth)
+	{
+		this(topPointList, isCCW, dis);
+		this.volume = PolygonAlgorithm.getVolume(this.topPointList,
+				this.bottomPointList, depth);
+	}
 	
 	/**
 	 * 0 : Success
@@ -173,6 +182,16 @@ public class PolygonInfo
 	public void setErrorCode(Integer errorCode)
 	{
 		this.errorCode = errorCode;
+	}
+
+	public Double getVolume()
+	{
+		return volume;
+	}
+
+	public void setVolume(Double volume)
+	{
+		this.volume = volume;
 	}
 
 }

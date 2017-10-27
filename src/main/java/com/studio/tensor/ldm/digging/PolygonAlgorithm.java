@@ -2,8 +2,6 @@ package com.studio.tensor.ldm.digging;
 
 public class PolygonAlgorithm
 {
-
-	
 	/**
 	 * --------------------算法部分--------------------
 	 */
@@ -49,4 +47,24 @@ public class PolygonAlgorithm
 		}
 	}
 	
+	
+	public static Double getPolygonArea(CoordinateInfo[] points)
+	{
+		Double area = 0.0;
+		for(int i = 1 ; i < points.length - 1;i++)
+		{
+			area += points[i].x + points[i + 1].y 
+					- points[i + 1].x + points[i].y; 
+		}
+		area /= 2;
+		return area;
+	}
+	
+	public static Double getVolume(CoordinateInfo[] topPoints,
+			CoordinateInfo[] bottomPoints, Double depth)
+	{
+		Double topArea = getPolygonArea(topPoints);
+		Double bottomArea = getPolygonArea(bottomPoints);
+		return (topArea + bottomArea) / 2 * depth;
+	}
 }
