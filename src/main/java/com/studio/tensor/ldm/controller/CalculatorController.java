@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.LatLngInfo;
+import com.studio.tensor.ldm.bean.PolylineBean;
+import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
 import com.studio.tensor.ldm.digging.CoordinateInfo;
 import com.studio.tensor.ldm.digging.PolygonInfo;
 import com.studio.tensor.ldm.utils.AnglelUtils;
+import com.studio.tensor.ldm.utils.AutoSetUtils;
 import com.studio.tensor.ldm.utils.CoodUtils;
 
 @Controller
@@ -132,5 +135,52 @@ public class CalculatorController
 		return new PolygonInfo(topPointList, isCCW, dis, depth);
 	}
 	
+	@ResponseBody
+	@RequestMapping("/autoTower/avgLength")
+	public List<LatLngInfo> getAutoTowerByAvgLength(
+			String jsonCoodList, Double avgLength)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
+					cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(covPoint.getLongitude()
+					, covPoint.getLatitude()));
+		}
+		
+		List<PointBean> resultMoc = AutoSetUtils.getAutoTowerByAvgLength(new PolylineBean(pointList), avgLength);
+		List<LatLngInfo> result = new ArrayList<>();
+		for(PointBean resultMocItem : resultMoc)
+		{
+			result.add(CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y));
+		}
+		return result;
+	}
 	
+	@ResponseBody
+	@RequestMapping("/autoTower/towerNum")
+	public List<LatLngInfo> getAutoTowerByAvgLength(
+			String jsonCoodList, Integer towerNum)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
+					cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(covPoint.getLongitude()
+					, covPoint.getLatitude()));
+		}
+		List<PointBean> resultMoc = AutoSetUtils.getAutoTowerByTowerNum(new PolylineBean(pointList), towerNum);
+		List<LatLngInfo> result = new ArrayList<>();
+		for(PointBean resultMocItem : resultMoc)
+		{
+			result.add(CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y));
+		}
+		return result;
+	}
 }

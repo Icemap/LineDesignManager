@@ -18,7 +18,9 @@ public class PolygonInfo
 			Double dis, Double depth)
 	{
 		this(topPointList, isCCW, dis);
-		this.volume = PolygonAlgorithm.getVolume(this.topPointList,
+		
+		if(errorCode == 0)
+			this.volume = PolygonAlgorithm.getVolume(this.topPointList,
 				this.bottomPointList, depth);
 	}
 	
@@ -30,6 +32,10 @@ public class PolygonInfo
 	public PolygonInfo(CoordinateInfo[] topPointList, Boolean isCCW,
 			Double distance)
 	{
+		//不是逆时针的话反转
+		if(!isCCW)
+			PolygonAlgorithm.reversePoints(topPointList);
+				
 		//添加点集顺逆属性
 		topPointList = PolygonAlgorithm.setPointsIsCCWProp(topPointList);
 		if(topPointList == null)
@@ -38,10 +44,6 @@ public class PolygonInfo
 			this.message = "输入点不足3个，生成错误。";
 			return;
 		}
-		
-		//不是逆时针的话反转
-		if(!isCCW)
-			PolygonAlgorithm.reversePoints(topPointList);
 		
 		this.topPointList = topPointList;
 		//格式化数据完成，所有的数据都是逆时针且大于等于三个点

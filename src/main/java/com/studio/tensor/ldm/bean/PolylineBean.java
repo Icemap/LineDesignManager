@@ -1,5 +1,6 @@
 package com.studio.tensor.ldm.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PolylineBean
@@ -11,20 +12,32 @@ public class PolylineBean
 	public PolylineBean(List<PointBean> pointList)
 	{
 		this.pointList = pointList;
+		lineMethodList = new ArrayList<>();
 		calLine();
 	}
 	
-	public class LineMethod
+	public static class LineMethod
 	{
-		public Double k;
-		public Double b;
+		public PointBean startPoint;
+		public PointBean endPoint;
 		public Double length;
 	}
 	
-	public class PointBean
+	public static class PointBean
 	{
 		public Double x;
 		public Double y;
+		
+		public PointBean()
+		{
+			
+		}
+		
+		public PointBean(Double x, Double y)
+		{
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
 	public void calLine()
@@ -33,11 +46,11 @@ public class PolylineBean
 		for(int i = 0;i < pointList.size() - 1; i++)
 		{
 			LineMethod line = new LineMethod();
-			line.k = (pointList.get(i).y - pointList.get(i + 1).y)
-					/ (pointList.get(i).x - pointList.get(i + 1).x);
-			line.b = pointList.get(i).y - line.k * pointList.get(i).x;
+			line.startPoint = pointList.get(i);
+			line.endPoint = pointList.get(i + 1);
+			line.length = getLength(pointList.get(i), pointList.get(i + 1));
 			lineMethodList.add(line);
-			length += getLength(pointList.get(i), pointList.get(i + 1));
+			length += line.length;
 		}
 	}
 	
