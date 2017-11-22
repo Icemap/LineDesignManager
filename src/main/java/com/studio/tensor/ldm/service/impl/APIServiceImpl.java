@@ -42,7 +42,7 @@ public class APIServiceImpl
 	
 	public ResultBean getApiMap(String account, String password)
 	{
-		if(adminSetting.isAdmin(account, password))
+		if(!adminSetting.isAdmin(account, password))
 			return ResultBean.isNotAdmin();
 		
 		return ResultBean.tokenKeyValid(apiMap);

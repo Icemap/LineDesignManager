@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.LatLngInfo;
-import com.studio.tensor.ldm.bean.PolylineBean;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
 import com.studio.tensor.ldm.digging.CoordinateInfo;
 import com.studio.tensor.ldm.digging.PolygonInfo;
@@ -151,7 +150,13 @@ public class CalculatorController
 					, covPoint.getLatitude()));
 		}
 		
-		List<PointBean> resultMoc = AutoSetUtils.getAutoTowerByAvgLength(new PolylineBean(pointList), avgLength);
+		List<PointBean> resultMoc = new ArrayList<>();
+		for(int i = 0;i < pointList.size() - 1;i++)
+		{
+			resultMoc.addAll(AutoSetUtils.getStrightLineAuto(pointList.get(i),
+					pointList.get(i + 1), avgLength));
+		}
+		
 		List<LatLngInfo> result = new ArrayList<>();
 		for(PointBean resultMocItem : resultMoc)
 		{
@@ -165,6 +170,7 @@ public class CalculatorController
 	public List<LatLngInfo> getAutoTowerByAvgLength(
 			String jsonCoodList, Integer towerNum)
 	{
+		
 		List<LatLngInfo> coodList = new Gson().fromJson(
 				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
 		List<PointBean> pointList = new ArrayList<>();
@@ -175,7 +181,16 @@ public class CalculatorController
 			pointList.add(new PointBean(covPoint.getLongitude()
 					, covPoint.getLatitude()));
 		}
-		List<PointBean> resultMoc = AutoSetUtils.getAutoTowerByTowerNum(new PolylineBean(pointList), towerNum);
+		
+		Double avgLength = AutoSetUtils.getTowerLength(pointList, towerNum);
+		
+		List<PointBean> resultMoc = new ArrayList<>();
+		for(int i = 0;i < pointList.size() - 1;i++)
+		{
+			resultMoc.addAll(AutoSetUtils.getStrightLineAuto(pointList.get(i),
+					pointList.get(i + 1), avgLength));
+		}
+		
 		List<LatLngInfo> result = new ArrayList<>();
 		for(PointBean resultMocItem : resultMoc)
 		{

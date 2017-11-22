@@ -54,4 +54,76 @@ public class AutoSetUtils
 		Double y = lineMethod.startPoint.y + _y * rate;
 		return new PointBean(x, y);
 	}
+	
+	//New Algo
+	public static List<PointBean> getStrightLineAuto(PointBean startPoint,
+			PointBean endPoint, Double avgLength)
+	{
+		List<PointBean> result = new ArrayList<>();
+		Double allLength = getLength(startPoint, endPoint);
+		Integer realNum = (int)(allLength / avgLength);
+		
+		Double _x = endPoint.x - startPoint.x;
+		Double _y = endPoint.y - startPoint.y;
+		
+		for(int i = 0;i < realNum - 1;i++)
+		{
+			Double xFeek = _x * (i + 1) / realNum;
+			Double yFeek = _y * (i + 1) / realNum;
+			
+			result.add(new PointBean(startPoint.x + xFeek, 
+					startPoint.y + yFeek));
+		}
+		
+		return result;
+	}
+	
+	public static Double getLength(PointBean point1, PointBean point2)
+	{
+		return Math.sqrt(Math.pow(point1.x - point2.x, 2) 
+				+ Math.pow(point1.y - point2.y, 2));
+	}
+	
+	public static Integer getRealTowerNum(List<PointBean> pbl, Double avgLength)
+	{
+		Integer num = 0;
+		for(int i = 0; i < pbl.size() - 1;i++)
+			num += (int)(getLength(pbl.get(i), pbl.get(i + 1)) / avgLength);
+		return num;
+	}
+	
+	public static Double getTowerLength(List<PointBean> pointList, Integer towerNum)
+	{
+		Double bigLength = 50.0;
+		Double smallLength = 1.0;
+		Integer bigLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, bigLength);
+		Integer smallLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, smallLength);
+		
+		while(bigLengthTowerNum != towerNum && smallLengthTowerNum != towerNum)
+		{
+			if(bigLengthTowerNum > towerNum && smallLengthTowerNum > towerNum)
+			{
+				smallLength = bigLength;
+				bigLength *= 2;
+			}
+			else if(bigLengthTowerNum < towerNum && smallLengthTowerNum > towerNum)
+			{
+				Double middleLength = (bigLength + smallLength) / 2;
+				Integer middleLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, middleLength);
+				if(middleLengthTowerNum >= towerNum)
+				{
+					smallLength = middleLength;
+				}
+				else if(middleLengthTowerNum < towerNum)
+				{
+					bigLength = middleLength;
+				}
+			}
+			smallLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, smallLength);
+			bigLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, bigLength);
+		}
+		
+		return smallLengthTowerNum == towerNum ? smallLength : bigLength;
+	}
+
 }
