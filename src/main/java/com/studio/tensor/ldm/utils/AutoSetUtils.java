@@ -88,7 +88,7 @@ public class AutoSetUtils
 	{
 		Integer num = 0;
 		for(int i = 0; i < pbl.size() - 1;i++)
-			num += (int)(getLength(pbl.get(i), pbl.get(i + 1)) / avgLength);
+			num += (int)(getLength(pbl.get(i), pbl.get(i + 1)) / avgLength - 1);
 		return num;
 	}
 	
