@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.studio.tensor.ldm.utils.AMapPointsUtils;
 import com.studio.tensor.ldm.utils.HttpUtils;
 import com.studio.tensor.ldm.utils.IPUtils;
 
@@ -16,7 +17,7 @@ import com.studio.tensor.ldm.utils.IPUtils;
 @RequestMapping("/map")
 public class MapController 
 {
-	String key = "3306e4b1597495612f004aa2938e7f0a";
+	String key = AMapPointsUtils.key;
 	
 	@ResponseBody
 	@RequestMapping("/getLocation")
@@ -39,6 +40,17 @@ public class MapController
 		params.put("origin", startLon + "," + startLat);
 		params.put("destination", endLon + "," + endLat);
 		return HttpUtils.URLGet("http://restapi.amap.com/v3/direction/driving",
+				params, HttpUtils.URL_PARAM_DECODECHARSET_UTF8);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/inputHint")
+	public String inputHint(String keywords)
+	{
+		Map<String, String> params = new HashMap<>();
+		params.put("key", key);
+		params.put("keywords", keywords);
+		return HttpUtils.URLGet("http://restapi.amap.com/v3/assistant/inputtips",
 				params, HttpUtils.URL_PARAM_DECODECHARSET_UTF8);
 	}
 }

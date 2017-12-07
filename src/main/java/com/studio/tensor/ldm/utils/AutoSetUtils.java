@@ -3,6 +3,7 @@ package com.studio.tensor.ldm.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean;
 import com.studio.tensor.ldm.bean.PolylineBean.LineMethod;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
@@ -125,5 +126,53 @@ public class AutoSetUtils
 		
 		return smallLengthTowerNum == towerNum ? smallLength : bigLength;
 	}
-
+	
+	public static Double getAllLength(List<PointBean> pointList)
+	{
+		Double length = 0.0;
+		for(int i = 1;i < pointList.size();i++)
+		{
+			length += getLength(pointList.get(i - 1), pointList.get(i));
+		}
+		
+		return length;
+	}
+	
+	public static List<MatStaBean> getAllMidPoint(List<PointBean> pointList, Integer staNum)
+	{
+		Double allLength = AutoSetUtils.getAllLength(pointList);
+		Double avgLength = allLength / staNum;
+		
+		List<MatStaBean> resultList = new ArrayList<>();
+		for(int i = 0;i < staNum;i++)
+		{
+			MatStaBean msb = new MatStaBean();
+			msb.setLocation(getPointByLength(pointList, i * avgLength + avgLength / 2));
+			msb.setIndex(i);
+			msb.setStartLength(avgLength * i);
+			msb.setEndLength(avgLength * i + avgLength);
+			resultList.add(msb);
+		}
+		return resultList;
+	}
+	
+	private static PointBean getPointByLength(List<PointBean> pointList, Double length)
+	{
+		for(int i = 1;i < pointList.size(); i++)
+		{
+			Double currentLength = getLength(pointList.get(i - 1), pointList.get(i));
+			if(length < currentLength)
+			{
+				Double rate = length / currentLength;
+				Double _x = (pointList.get(i).x - pointList.get(i - 1).x) * rate;
+				Double _y = (pointList.get(i).y - pointList.get(i - 1).y) * rate;
+				return new PointBean(
+						pointList.get(i - 1).x + _x,
+						pointList.get(i - 1).y + _y);
+			}
+			else
+				length -= currentLength;
+		}
+		return new PointBean();
+	}
 }

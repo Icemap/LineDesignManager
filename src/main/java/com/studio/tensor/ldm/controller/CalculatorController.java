@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.LatLngInfo;
+import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
 import com.studio.tensor.ldm.digging.CoordinateInfo;
 import com.studio.tensor.ldm.digging.PolygonInfo;
+import com.studio.tensor.ldm.utils.AMapPointsUtils;
 import com.studio.tensor.ldm.utils.AnglelUtils;
 import com.studio.tensor.ldm.utils.AutoSetUtils;
 import com.studio.tensor.ldm.utils.CoodUtils;
@@ -197,5 +199,29 @@ public class CalculatorController
 			result.add(CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y));
 		}
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/autoMatSta")
+	public List<MatStaBean> getAutoMaterialStation(
+			String jsonCoodList, Integer staNum)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			pointList.add(new PointBean(cood.getLongitude()
+					, cood.getLatitude()));
+		}
+		
+		List<MatStaBean> midList = AutoSetUtils.getAllMidPoint(pointList, staNum);
+		List<MatStaBean> resultList = new ArrayList<>();
+		for(MatStaBean srcBean: midList)
+		{
+			resultList.add(AMapPointsUtils.getNearestRoadPoint(srcBean));
+		}
+		
+		return resultList;
 	}
 }
