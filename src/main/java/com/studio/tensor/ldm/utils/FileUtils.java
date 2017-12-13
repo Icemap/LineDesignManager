@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Date;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -118,6 +119,16 @@ public class FileUtils
 		} 
 		br.close();
 		return sb.toString();
+	}
+	
+	public static String saveFile(MultipartFile file, String path)
+	{
+		String extName = file.getOriginalFilename().substring(file.
+				getOriginalFilename().lastIndexOf(".")).toLowerCase(); 
+		String fileName = (new Date()).toString() + "." + extName;
+		
+		saveFile(safeGetInputStream(file), fileName, path);
+		return fileName;
 	}
 	
 	public static String saveFile(InputStream inputStream, String fileName,String path) 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.studio.tensor.ldm.bean.AutoTowerBean;
 import com.studio.tensor.ldm.bean.LatLngInfo;
 import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
@@ -138,7 +139,7 @@ public class CalculatorController
 	
 	@ResponseBody
 	@RequestMapping("/autoTower/avgLength")
-	public List<LatLngInfo> getAutoTowerByAvgLength(
+	public List<AutoTowerBean> getAutoTowerByAvgLength(
 			String jsonCoodList, Double avgLength)
 	{
 		List<LatLngInfo> coodList = new Gson().fromJson(
@@ -152,24 +153,32 @@ public class CalculatorController
 					, covPoint.getLatitude()));
 		}
 		
-		List<PointBean> resultMoc = new ArrayList<>();
+		List<AutoTowerBean> resultMoc = new ArrayList<>();
 		for(int i = 0;i < pointList.size() - 1;i++)
 		{
-			resultMoc.addAll(AutoSetUtils.getStrightLineAuto(pointList.get(i),
-					pointList.get(i + 1), avgLength));
+			List<PointBean> pCoodList = AutoSetUtils.getStrightLineAuto(pointList.get(i),
+					pointList.get(i + 1), avgLength);
+
+			resultMoc.add(new AutoTowerBean(pointList.get(i), i == 0 ? "start" : "turn"));
+			for(PointBean pCood : pCoodList)
+			{
+				resultMoc.add(new AutoTowerBean(pCood,"straight"));
+			}
 		}
+		resultMoc.add(new AutoTowerBean(pointList.get(pointList.size() - 1), "end"));
 		
-		List<LatLngInfo> result = new ArrayList<>();
-		for(PointBean resultMocItem : resultMoc)
+		List<AutoTowerBean> result = new ArrayList<>();
+		for(AutoTowerBean resultMocItem : resultMoc)
 		{
-			result.add(CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y));
+			LatLngInfo latLngInfo = CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y);
+			result.add(new AutoTowerBean(latLngInfo.getLongitude(), latLngInfo.getLatitude(),resultMocItem.pointType));
 		}
 		return result;
 	}
 	
 	@ResponseBody
 	@RequestMapping("/autoTower/towerNum")
-	public List<LatLngInfo> getAutoTowerByAvgLength(
+	public List<AutoTowerBean> getAutoTowerByAvgLength(
 			String jsonCoodList, Integer towerNum)
 	{
 		
@@ -186,17 +195,25 @@ public class CalculatorController
 		
 		Double avgLength = AutoSetUtils.getTowerLength(pointList, towerNum);
 		
-		List<PointBean> resultMoc = new ArrayList<>();
+		List<AutoTowerBean> resultMoc = new ArrayList<>();
 		for(int i = 0;i < pointList.size() - 1;i++)
 		{
-			resultMoc.addAll(AutoSetUtils.getStrightLineAuto(pointList.get(i),
-					pointList.get(i + 1), avgLength));
+			List<PointBean> pCoodList = AutoSetUtils.getStrightLineAuto(pointList.get(i),
+					pointList.get(i + 1), avgLength);
+
+			resultMoc.add(new AutoTowerBean(pointList.get(i), i == 0 ? "start" : "turn"));
+			for(PointBean pCood : pCoodList)
+			{
+				resultMoc.add(new AutoTowerBean(pCood,"straight"));
+			}
 		}
+		resultMoc.add(new AutoTowerBean(pointList.get(pointList.size() - 1), "end"));
 		
-		List<LatLngInfo> result = new ArrayList<>();
-		for(PointBean resultMocItem : resultMoc)
+		List<AutoTowerBean> result = new ArrayList<>();
+		for(AutoTowerBean resultMocItem : resultMoc)
 		{
-			result.add(CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y));
+			LatLngInfo latLngInfo = CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y);
+			result.add(new AutoTowerBean(latLngInfo.getLongitude(), latLngInfo.getLatitude(),resultMocItem.pointType));
 		}
 		return result;
 	}

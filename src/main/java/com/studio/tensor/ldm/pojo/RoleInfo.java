@@ -3,11 +3,11 @@ package com.studio.tensor.ldm.pojo;
 public class RoleInfo {
     private Integer id;
 
-    private String name;
+    private String roleName;
 
     private String des;
 
-    private String apiJson;
+    private Integer frontNodeId;
 
     public Integer getId() {
         return id;
@@ -17,12 +17,12 @@ public class RoleInfo {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setRoleName(String roleName) {
+        this.roleName = roleName == null ? null : roleName.trim();
     }
 
     public String getDes() {
@@ -33,11 +33,11 @@ public class RoleInfo {
         this.des = des == null ? null : des.trim();
     }
 
-    public String getApiJson() {
-        return apiJson;
+    public Integer getFrontNodeId() {
+        return frontNodeId;
     }
 
-    public void setApiJson(String apiJson) {
-        this.apiJson = apiJson == null ? null : apiJson.trim();
+    public void setFrontNodeId(Integer frontNodeId) {
+        this.frontNodeId = frontNodeId;
     }
 }

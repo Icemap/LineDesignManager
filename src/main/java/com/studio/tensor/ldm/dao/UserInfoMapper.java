@@ -13,10 +13,10 @@ public interface UserInfoMapper {
 
     UserInfo selectByPrimaryKey(Integer id);
 
-    UserInfo userLogin(@Param("account")String account, 
-    		@Param("password")String password);
-    
     int updateByPrimaryKeySelective(UserInfo record);
 
     int updateByPrimaryKey(UserInfo record);
+    
+    UserInfo userLogin(@Param("phoneNum")String phoneNum,
+    		@Param("password")String password);
 }

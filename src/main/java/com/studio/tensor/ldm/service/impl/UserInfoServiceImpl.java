@@ -1,64 +1,77 @@
 package com.studio.tensor.ldm.service.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.studio.tensor.ldm.bean.LoginResult;
+import com.studio.tensor.ldm.bean.FileSetting;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.dao.UserInfoMapper;
 import com.studio.tensor.ldm.pojo.UserInfo;
 import com.studio.tensor.ldm.service.UserInfoService;
+import com.studio.tensor.ldm.utils.FileUtils;
 import com.studio.tensor.ldm.utils.HashUtils;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService
 {
 	@Autowired
-	TokenServiceImpl tokenServiceImpl;
+	UserInfoMapper userInfoMapper;
 
 	@Autowired
-	UserInfoMapper userInfoMapper;
-	
-	@Autowired
-	RoleInfoServiceImpl roleInfoServiceImpl;
+	FileSetting fileSetting;
 	
 	@Override
-	public ResultBean userLogin(String account, String password, String apiKey)
+	public ResultBean userLogin(String phoneNum, String password)
 	{
-		UserInfo userInfo = userInfoMapper.userLogin(account, HashUtils.getMD5(password));
-		if(userInfo == null) return ResultBean.userNotExist();
-		if(!roleInfoServiceImpl.hasPermission(userInfo.getRoleId(), apiKey))
-			return ResultBean.permissionDenied();
-		
-		String token = tokenServiceImpl.loginSetAndReturnToken(userInfo.getId(),
-				userInfo.getRoleId());
-		tokenServiceImpl.refleshKeyLifeTime(token);
-		
-		LoginResult loginResult = new LoginResult();
-		loginResult.setUserInfo(userInfo);
-		loginResult.setToken(token);
-		return ResultBean.tokenKeyValid(loginResult);
+		UserInfo userInfo = userInfoMapper.userLogin(
+				phoneNum, HashUtils.getMD5(password));
+		return ResultBean.tokenKeyValid(userInfo);
 	}
 
 	@Override
-	public ResultBean userRegister(String account, String password)
+	public ResultBean userRegister(String phoneNum, String password)
 	{
 		UserInfo userInfo = new UserInfo();
-		userInfo.setAccount(account);
-		userInfo.setHashPassword(password);
-		
-		userInfoMapper.insertSelective(userInfo);
-		return ResultBean.tokenKeyValid(true);
+		userInfo.setPhoneNumber(phoneNum);
+		userInfo.setPassword(HashUtils.getMD5(password));
+		return ResultBean.tokenKeyValid(
+				userInfoMapper.insertSelective(userInfo) == 1);
 	}
 
 	@Override
-	public ResultBean userUpdate(UserInfo userInfo, String token, String apiKey)
+	public ResultBean userUpdateNickName(Integer id, String nickName)
 	{
-		if(tokenServiceImpl.confirmToken(token))
-			return ResultBean.tokenKeyValid(userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1);
-		if(!roleInfoServiceImpl.hasPermission(userInfo.getRoleId(), apiKey))
-			return ResultBean.permissionDenied();
-		
-		return ResultBean.tokenKeyNotValid();
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(id);
+		userInfo.setNickName(nickName);
+		return ResultBean.tokenKeyValid(userInfoMapper.
+				updateByPrimaryKeySelective(userInfo));
 	}
+
+	@Override
+	public ResultBean userUpdateIcon(Integer id, MultipartFile icon)
+	{
+		String fileName = FileUtils.saveFile(icon, fileSetting.getGetFilePath());
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(id);
+		userInfo.setIconUrl(fileSetting.getSaveFilePath() + fileName);
+		return ResultBean.tokenKeyValid(userInfoMapper.
+				updateByPrimaryKeySelective(userInfo));
+	}
+
+	@Override
+	public ResultBean userForgetPasswordRequest(String phoneNum)
+	{
+		return null;
+	}
+
+	@Override
+	public ResultBean userForgetPasswordChange(String confirmCode, String newPassword)
+	{
+		return null;
+	}
+
 }

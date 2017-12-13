@@ -1,11 +1,16 @@
 package com.studio.tensor.ldm.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.studio.tensor.ldm.bean.ResultBean;
-import com.studio.tensor.ldm.pojo.UserInfo;
 
 public interface UserInfoService
 {
-	ResultBean userLogin(String account, String password, String apiKey);
-	ResultBean userRegister(String account, String password);
-	ResultBean userUpdate(UserInfo userInfo, String token, String apiKey);
+	ResultBean userLogin(String phoneNum, String password);
+	ResultBean userRegister(String phoneNum, String password);
+	ResultBean userUpdateNickName(Integer id, String nickName);
+	ResultBean userUpdateIcon(Integer id, MultipartFile icon);
+	ResultBean userForgetPasswordRequest(String phoneNum);
+	ResultBean userForgetPasswordChange(String confirmCode,
+			String newPassword);
 }

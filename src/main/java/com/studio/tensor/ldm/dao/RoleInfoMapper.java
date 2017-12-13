@@ -1,7 +1,5 @@
 package com.studio.tensor.ldm.dao;
 
-import java.util.List;
-
 import com.studio.tensor.ldm.pojo.RoleInfo;
 
 public interface RoleInfoMapper {
@@ -16,6 +14,4 @@ public interface RoleInfoMapper {
     int updateByPrimaryKeySelective(RoleInfo record);
 
     int updateByPrimaryKey(RoleInfo record);
-    
-    List<RoleInfo> getAllRoleInfo();
 }

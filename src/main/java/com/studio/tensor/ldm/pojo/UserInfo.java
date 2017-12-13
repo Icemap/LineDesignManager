@@ -1,20 +1,17 @@
 package com.studio.tensor.ldm.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import com.studio.tensor.ldm.utils.HashUtils;
-
 public class UserInfo {
     private Integer id;
 
-    private String account;
+    private String phoneNumber;
 
-    @JsonIgnore
     private String password;
 
     private Integer roleId;
 
-    private String userName;
+    private String nickName;
+
+    private String iconUrl;
 
     public Integer getId() {
         return id;
@@ -24,12 +21,12 @@ public class UserInfo {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
     public String getPassword() {
@@ -40,11 +37,6 @@ public class UserInfo {
         this.password = password == null ? null : password.trim();
     }
 
-    public void setHashPassword(String password)
-    {
-    	setPassword(HashUtils.getMD5(password));
-    }
-    
     public Integer getRoleId() {
         return roleId;
     }
@@ -53,11 +45,19 @@ public class UserInfo {
         this.roleId = roleId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl == null ? null : iconUrl.trim();
     }
 }

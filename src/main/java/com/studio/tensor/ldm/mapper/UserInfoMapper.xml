@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.studio.tensor.ldm.dao.UserInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.UserInfo" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="account" property="account" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="role_id" property="roleId" jdbcType="INTEGER" />
-    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studio.tensor.ldm.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.UserInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, account, password, role_id, user_name
+  <sql id="Base_Column_List">
+    id, phone_number, password, role_id, nick_name, icon_url
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user_info
@@ -22,81 +23,93 @@
     select 
     <include refid="Base_Column_List" />
     from user_info
-    where account = #{account,jdbcType=VARCHAR}
+    where phone_number = #{phoneNum,jdbcType=VARCHAR}
       and password = #{password,jdbcType=VARCHAR}
   </select>
   
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.UserInfo" >
-    insert into user_info (id, account, password, 
-      role_id, user_name)
-    values (#{id,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{roleId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
+    insert into user_info (id, phone_number, password, 
+      role_id, nick_name, icon_url
+      )
+    values (#{id,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{iconUrl,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo" >
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
     insert into user_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="account != null" >
-        account,
+      <if test="phoneNumber != null">
+        phone_number,
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password,
       </if>
-      <if test="roleId != null" >
+      <if test="roleId != null">
         role_id,
       </if>
-      <if test="userName != null" >
-        user_name,
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="account != null" >
-        #{account,jdbcType=VARCHAR},
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="roleId != null" >
+      <if test="roleId != null">
         #{roleId,jdbcType=INTEGER},
       </if>
-      <if test="userName != null" >
-        #{userName,jdbcType=VARCHAR},
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
     update user_info
-    <set >
-      <if test="account != null" >
-        account = #{account,jdbcType=VARCHAR},
+    <set>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="roleId != null" >
+      <if test="roleId != null">
         role_id = #{roleId,jdbcType=INTEGER},
       </if>
-      <if test="userName != null" >
-        user_name = #{userName,jdbcType=VARCHAR},
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.UserInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
     update user_info
-    set account = #{account,jdbcType=VARCHAR},
+    set phone_number = #{phoneNumber,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR}
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      icon_url = #{iconUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

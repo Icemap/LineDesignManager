@@ -5,7 +5,7 @@ import redis.clients.jedis.Jedis;
 public class RedisJava {
     public static void main(String[] args) {
         //连接本地的 Redis 服务
-        Jedis jedis = new Jedis("wangqizhi.top");
+        Jedis jedis = new Jedis("120.78.205.53",8100);
         System.out.println("连接成功");
         jedis.lpush("site-list", "Runoob");
         //查看服务是否运行

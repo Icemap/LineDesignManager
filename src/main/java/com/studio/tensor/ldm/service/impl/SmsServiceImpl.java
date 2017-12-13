@@ -1,7 +1,9 @@
 package com.studio.tensor.ldm.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
@@ -16,7 +18,7 @@ import com.studio.tensor.ldm.utils.SmsUtils;
 public class SmsServiceImpl implements SmsService
 {
 	@Autowired
-	TokenServiceImpl tokenServiceImpl;
+	RedisServiceImpl redisServiceImpl;
 	
 	String signName;
 	String registerTemplateCode;
@@ -31,7 +33,9 @@ public class SmsServiceImpl implements SmsService
 	@Override
 	public ResultBean getRegisterCode(String phoneNum)
 	{
-		String code = tokenServiceImpl.getRegisterCode(phoneNum);
+		String code = getConfirmCode();
+		redisServiceImpl.setConfirmCode(phoneNum, code);
+		
 		Map<String, String> map = new HashMap<>();
 		map.put("code", code);
 		
@@ -43,6 +47,17 @@ public class SmsServiceImpl implements SmsService
 	public ResultBean compareRegisterCode(String phoneNum, String code)
 	{
 		return ResultBean.tokenKeyValid(
-				tokenServiceImpl.compareRegisterCode(phoneNum, code));
+				redisServiceImpl.getConfirmCode(phoneNum, code));
+	}
+	
+	private String getConfirmCode()
+	{
+		String left = (new Date().getTime() + "");
+		left = left.substring(left.length() - 3, left.length());
+		
+		Random random = new Random(new Date().getTime());
+		String right = random.nextInt(100) + "";
+		
+		return left + right;
 	}
 }
