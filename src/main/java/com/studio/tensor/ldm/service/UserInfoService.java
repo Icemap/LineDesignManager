@@ -11,6 +11,6 @@ public interface UserInfoService
 	ResultBean userUpdateNickName(Integer id, String nickName);
 	ResultBean userUpdateIcon(Integer id, MultipartFile icon);
 	ResultBean userForgetPasswordRequest(String phoneNum);
-	ResultBean userForgetPasswordChange(String confirmCode,
+	ResultBean userForgetPasswordChange(String phoneNum, String confirmCode,
 			String newPassword);
 }

@@ -5,5 +5,5 @@ import com.studio.tensor.ldm.bean.ResultBean;
 public interface SmsService
 {
 	ResultBean getRegisterCode(String phoneNum);
-	ResultBean compareRegisterCode(String phoneNum, String code);
+	Boolean compareRegisterCode(String phoneNum, String code);
 }

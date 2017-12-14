@@ -1,7 +1,5 @@
 package com.studio.tensor.ldm.service.impl;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,36 +18,18 @@ public class FileInfoServiceImpl implements FileService
 	FileInfoMapper fileInfoMapper;
 
 	@Autowired
-	TokenServiceImpl tokenServiceImpl;
-	
-	@Autowired
 	FileSetting fileSetting;
 	
-	@Autowired
-	RoleInfoServiceImpl roleInfoServiceImpl;
-	
 	@Override
-	public ResultBean insertFileByUser(FileInfo fileInfo, String token, String apiKey)
+	public ResultBean insertFileByUser(FileInfo fileInfo)
 	{
-		Integer roleId = tokenServiceImpl.confirmTokenAndReturnRoleId(token);
-		if(roleId == null) return ResultBean.tokenKeyNotValid();
-		if(!roleInfoServiceImpl.hasPermission(roleId, apiKey))
-			return ResultBean.permissionDenied();
-		
-		return ResultBean.tokenKeyValid(fileInfoMapper.insertSelective(fileInfo));
+		return ResultBean.tokenKeyValid(fileInfoMapper.insertSelective(fileInfo) == 1);
 	}
 
 	@Override
-	public ResultBean saveFile(MultipartFile file, String token, String apiKey)
+	public ResultBean saveFile(MultipartFile file)
 	{
-		Integer roleId = tokenServiceImpl.confirmTokenAndReturnRoleId(token);
-		if(roleId == null) return ResultBean.tokenKeyNotValid();
-		if(!roleInfoServiceImpl.hasPermission(roleId, apiKey))
-			return ResultBean.permissionDenied();
-			
-		String fileName = new Date().getTime() + "";
-		FileUtils.saveFile(FileUtils.safeGetInputStream(file), 
-				fileName, fileSetting.getSaveFilePath());
-		return ResultBean.tokenKeyValid(fileSetting.getGetFilePath() + fileName);
+		String name = FileUtils.saveFile(file, fileSetting.getSaveFilePath());
+		return ResultBean.tokenKeyValid(fileSetting.getGetFilePath() + name);
 	}
 }

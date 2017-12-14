@@ -20,28 +20,4 @@ public class FileController
 {
 	@Autowired
 	FileInfoServiceImpl fileInfoServiceImpl;
-	
-	@ResponseBody
-	@RequestMapping("/saveFile")
-	@RegisterToAPI(apiKey="file-saveFile", apiValue="保存矢量文件并返回URL")
-	public ResultBean saveFile(
-			@RequestParam(value = "file",required = true)MultipartFile file,
-			@RequestParam(value = "token",required = true)String token)
-	{
-		return fileInfoServiceImpl.saveFile(file, token, "file-saveFile");
-	}
-	
-	@ResponseBody
-	@RequestMapping("/saveData")
-	@RegisterToAPI(apiKey="file-saveData", apiValue="保存矢量文件URL及其他数据")
-	public ResultBean saveData(String fileUrl, Integer belongUserId,
-			String tag, String token)
-	{
-		FileInfo fileInfo = new FileInfo();
-		fileInfo.setFileUrl(fileUrl);
-		fileInfo.setBelongUserId(belongUserId);
-		fileInfo.setTag(tag);
-		
-		return fileInfoServiceImpl.insertFileByUser(fileInfo, token, "file-saveData");
-	}
 }

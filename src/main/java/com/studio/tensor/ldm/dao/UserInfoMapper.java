@@ -19,4 +19,7 @@ public interface UserInfoMapper {
     
     UserInfo userLogin(@Param("phoneNum")String phoneNum,
     		@Param("password")String password);
+    
+    int updatePasswordByPhone(@Param("phoneNum")String phoneNum,
+    		@Param("password")String password);
 }

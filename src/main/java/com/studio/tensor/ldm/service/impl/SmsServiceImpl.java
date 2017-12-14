@@ -44,10 +44,9 @@ public class SmsServiceImpl implements SmsService
 	}
 
 	@Override
-	public ResultBean compareRegisterCode(String phoneNum, String code)
+	public Boolean compareRegisterCode(String phoneNum, String code)
 	{
-		return ResultBean.tokenKeyValid(
-				redisServiceImpl.getConfirmCode(phoneNum, code));
+		return  redisServiceImpl.getConfirmCode(phoneNum, code);
 	}
 	
 	private String getConfirmCode()

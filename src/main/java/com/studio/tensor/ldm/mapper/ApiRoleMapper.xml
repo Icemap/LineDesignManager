@@ -15,6 +15,13 @@
     from api_role
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from api_role
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from api_role
     where id = #{id,jdbcType=INTEGER}

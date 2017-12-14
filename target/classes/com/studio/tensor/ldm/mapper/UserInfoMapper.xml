@@ -103,6 +103,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <update id="updatePasswordByPhone">
+    update user_info
+    set password = #{password,jdbcType=VARCHAR}
+    where phone_number = #{phoneNum,jdbcType=VARCHAR}
+  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
     update user_info
     set phone_number = #{phoneNumber,jdbcType=VARCHAR},

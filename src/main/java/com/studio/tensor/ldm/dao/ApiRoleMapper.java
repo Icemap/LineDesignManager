@@ -1,5 +1,7 @@
 package com.studio.tensor.ldm.dao;
 
+import java.util.List;
+
 import com.studio.tensor.ldm.pojo.ApiRole;
 
 public interface ApiRoleMapper {
@@ -14,4 +16,6 @@ public interface ApiRoleMapper {
     int updateByPrimaryKeySelective(ApiRole record);
 
     int updateByPrimaryKey(ApiRole record);
+    
+    List<ApiRole> selectAll();
 }

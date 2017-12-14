@@ -3,10 +3,13 @@ package com.studio.tensor.ldm.service.impl;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.springframework.stereotype.Service;
+
 import com.studio.tensor.ldm.service.RedisService;
 
 import redis.clients.jedis.Jedis;
 
+@Service
 public class RedisServiceImpl implements RedisService
 {
 	private Jedis jedis;

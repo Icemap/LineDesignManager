@@ -1,5 +1,7 @@
 package com.studio.tensor.ldm.dao;
 
+import java.util.List;
+
 import com.studio.tensor.ldm.pojo.ApiInfo;
 
 public interface ApiInfoMapper {
@@ -14,4 +16,6 @@ public interface ApiInfoMapper {
     int updateByPrimaryKeySelective(ApiInfo record);
 
     int updateByPrimaryKey(ApiInfo record);
+    
+    List<ApiInfo> selectAll();
 }
