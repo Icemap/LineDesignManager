@@ -1,6 +1,8 @@
 package com.studio.tensor.ldm.service;
 
-import com.studio.tensor.ldm.bean.PermissionTree;
+import java.util.List;
+
+import com.studio.tensor.ldm.bean.PermissionNode;
 import com.studio.tensor.ldm.pojo.ApiInfo;
 import com.studio.tensor.ldm.pojo.ApiRole;
 import com.studio.tensor.ldm.pojo.RoleInfo;
@@ -8,7 +10,7 @@ import com.studio.tensor.ldm.pojo.RoleInfo;
 public interface PermissionInfoService
 {
 	//Role
-	Boolean insertRole(String roleName, String des, String fontNodeId);
+	Boolean insertRole(String roleName, String des);
 	Boolean deleteRole(Integer roleId);
 	Boolean updateRole(RoleInfo roleInfo);
 	
@@ -23,5 +25,5 @@ public interface PermissionInfoService
 	Boolean updateApiRole(ApiRole apiRole);
 	
 	//Tree
-	PermissionTree getAllTree();
+	List<PermissionNode> getAllNode();
 }

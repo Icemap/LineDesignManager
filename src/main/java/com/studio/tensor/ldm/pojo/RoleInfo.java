@@ -7,8 +7,6 @@ public class RoleInfo {
 
     private String des;
 
-    private Integer frontNodeId;
-
     public Integer getId() {
         return id;
     }
@@ -31,13 +29,5 @@ public class RoleInfo {
 
     public void setDes(String des) {
         this.des = des == null ? null : des.trim();
-    }
-
-    public Integer getFrontNodeId() {
-        return frontNodeId;
-    }
-
-    public void setFrontNodeId(Integer frontNodeId) {
-        this.frontNodeId = frontNodeId;
     }
 }

@@ -7,7 +7,8 @@ import com.studio.tensor.ldm.bean.ResultBean;
 public interface UserInfoService
 {
 	ResultBean userLogin(String phoneNum, String password);
-	ResultBean userRegister(String phoneNum, String password);
+	ResultBean userRegisterSendCode(String phoneNum);
+	ResultBean userRegister(String phoneNum, String password, String code);
 	ResultBean userUpdateNickName(Integer id, String nickName);
 	ResultBean userUpdateIcon(Integer id, MultipartFile icon);
 	ResultBean userForgetPasswordRequest(String phoneNum);

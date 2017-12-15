@@ -39,10 +39,19 @@ public class UserInfoServiceImpl implements UserInfoService
 		redisServiceImpl.setToken(token, new Gson().toJson(userInfo));
 		return ResultBean.tokenKeyValid(token);
 	}
-
+	
 	@Override
-	public ResultBean userRegister(String phoneNum, String password)
+	public ResultBean userRegisterSendCode(String phoneNum)
 	{
+		return ResultBean.tokenKeyValid(smsServiceImpl.getRegisterCode(phoneNum));
+	}
+	
+	@Override
+	public ResultBean userRegister(String phoneNum, String password, String code)
+	{
+		if(!smsServiceImpl.compareRegisterCode(phoneNum, code))
+			return ResultBean.tokenKeyNotValid();
+		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPhoneNumber(phoneNum);
 		userInfo.setPassword(HashUtils.getMD5(password));
