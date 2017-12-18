@@ -1,10 +1,13 @@
 package com.studio.tensor.ldm.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 public class UserInfo {
     private Integer id;
 
     private String phoneNumber;
 
+    @JsonIgnore
     private String password;
 
     private Integer roleId;

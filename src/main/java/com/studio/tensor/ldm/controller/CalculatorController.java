@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.AutoTowerBean;
+import com.studio.tensor.ldm.bean.AutoTowerBeanWithLength;
 import com.studio.tensor.ldm.bean.LatLngInfo;
 import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
@@ -139,7 +140,7 @@ public class CalculatorController
 	
 	@ResponseBody
 	@RequestMapping("/autoTower/avgLength")
-	public List<AutoTowerBean> getAutoTowerByAvgLength(
+	public List<AutoTowerBeanWithLength> getAutoTowerByAvgLength(
 			String jsonCoodList, Double avgLength)
 	{
 		List<LatLngInfo> coodList = new Gson().fromJson(
@@ -173,12 +174,12 @@ public class CalculatorController
 			LatLngInfo latLngInfo = CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y);
 			result.add(new AutoTowerBean(latLngInfo.getLongitude(), latLngInfo.getLatitude(),resultMocItem.pointType));
 		}
-		return result;
+		return AutoTowerBeanWithLength.setLength(result);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/autoTower/towerNum")
-	public List<AutoTowerBean> getAutoTowerByAvgLength(
+	public List<AutoTowerBeanWithLength> getAutoTowerByAvgLength(
 			String jsonCoodList, Integer towerNum)
 	{
 		
@@ -215,7 +216,7 @@ public class CalculatorController
 			LatLngInfo latLngInfo = CoodUtils.mercatorToLonLat(resultMocItem.x, resultMocItem.y);
 			result.add(new AutoTowerBean(latLngInfo.getLongitude(), latLngInfo.getLatitude(),resultMocItem.pointType));
 		}
-		return result;
+		return AutoTowerBeanWithLength.setLength(result);
 	}
 	
 	@ResponseBody

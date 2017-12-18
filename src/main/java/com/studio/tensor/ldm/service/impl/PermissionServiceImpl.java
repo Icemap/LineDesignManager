@@ -23,6 +23,7 @@ import com.studio.tensor.ldm.service.PermissionInfoService;
 public class PermissionServiceImpl implements PermissionInfoService
 {
 	private List<PermissionNode> permissionNodeList;
+	private Map<String, List<Integer>> apiAllowMap;
 	
 	@Autowired
 	RoleInfoMapper roleInfoMapper;
@@ -36,7 +37,8 @@ public class PermissionServiceImpl implements PermissionInfoService
 	@PostConstruct
 	private void onInit()
 	{
-		buildNodeList(); 
+		buildNodeList();
+		buildApiAllowList();
 	}
 
 	@Override
@@ -45,19 +47,28 @@ public class PermissionServiceImpl implements PermissionInfoService
 		RoleInfo roleInfo = new RoleInfo();
 		roleInfo.setRoleName(roleName);
 		roleInfo.setDes(des);
-		return roleInfoMapper.insertSelective(roleInfo) == 1;
+		roleInfoMapper.insertSelective(roleInfo);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean deleteRole(Integer roleId)
 	{
-		return roleInfoMapper.deleteByPrimaryKey(roleId) == 1;
+		roleInfoMapper.deleteByPrimaryKey(roleId);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean updateRole(RoleInfo roleInfo)
 	{
-		return roleInfoMapper.updateByPrimaryKey(roleInfo) == 1;
+		roleInfoMapper.updateByPrimaryKey(roleInfo);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
@@ -66,19 +77,28 @@ public class PermissionServiceImpl implements PermissionInfoService
 		ApiInfo apiInfo = new ApiInfo();
 		apiInfo.setApiName(apiName);
 		apiInfo.setUrl(url);
-		return apiInfoMapper.insertSelective(apiInfo) == 1;
+		apiInfoMapper.insertSelective(apiInfo);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean deleteAPI(Integer apiId)
 	{
-		return apiInfoMapper.deleteByPrimaryKey(apiId) == 1;
+		apiInfoMapper.deleteByPrimaryKey(apiId);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean updateAPI(ApiInfo apiInfo)
 	{
-		return apiInfoMapper.updateByPrimaryKeySelective(apiInfo) == 1;
+		apiInfoMapper.updateByPrimaryKeySelective(apiInfo);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
@@ -87,19 +107,28 @@ public class PermissionServiceImpl implements PermissionInfoService
 		ApiRole apiRole = new ApiRole();
 		apiRole.setApiId(apiId);
 		apiRole.setRoleId(roleId);
-		return apiRoleMapper.insertSelective(apiRole) == 1;
+		apiRoleMapper.insertSelective(apiRole);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean deleteApiRole(Integer apiRoleId)
 	{
-		return apiRoleMapper.deleteByPrimaryKey(apiRoleId) == 1;
+		apiRoleMapper.deleteByPrimaryKey(apiRoleId);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
 	public Boolean updateApiRole(ApiRole apiRole)
 	{
-		return apiRoleMapper.updateByPrimaryKeySelective(apiRole) == 1;
+		apiRoleMapper.updateByPrimaryKeySelective(apiRole);
+		buildNodeList();
+		buildApiAllowList();
+		return true;
 	}
 
 	@Override
@@ -136,5 +165,39 @@ public class PermissionServiceImpl implements PermissionInfoService
 				.get(roleListIndex)
 				.allowList.add(apiList.get(apiListIndex));
 		}
+	}
+
+
+	private void buildApiAllowList()
+	{
+		apiAllowMap = new HashMap<>();
+		List<ApiInfo> apiInfoList = apiInfoMapper.selectAll();
+		List<ApiRole> apiRolelist = apiRoleMapper.selectAll();
+		for(ApiInfo api : apiInfoList)
+		{
+			apiAllowMap.put(api.getUrl(), getApiAllowRole(apiRolelist, api.getId()));
+		}
+	}
+	
+	private List<Integer> getApiAllowRole(List<ApiRole> apiRolelist, Integer apiId)
+	{
+		List<Integer> result = new ArrayList<>();
+		for(ApiRole apiRole : apiRolelist)
+		{
+			if(apiRole.getApiId().equals(apiId))
+				result.add(apiRole.getRoleId());
+		}
+		
+		return result;
+	}
+	
+	public Boolean isApiExist(String apiPath)
+	{
+		return apiAllowMap.containsKey(apiPath);
+	}
+	
+	public Boolean isRoleAllowThisApi(String apiPath, Integer roleId)
+	{
+		return apiAllowMap.get(apiPath).contains(roleId);
 	}
 }

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.studio.tensor.ldm.bean.FileSetting;
+import com.studio.tensor.ldm.bean.LoginResult;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.dao.UserInfoMapper;
 import com.studio.tensor.ldm.pojo.UserInfo;
@@ -36,8 +36,12 @@ public class UserInfoServiceImpl implements UserInfoService
 		UserInfo userInfo = userInfoMapper.userLogin(
 				phoneNum, HashUtils.getMD5(password));
 		String token = HashUtils.getMD5(phoneNum + new Date().toString());
-		redisServiceImpl.setToken(token, new Gson().toJson(userInfo));
-		return ResultBean.tokenKeyValid(token);
+		redisServiceImpl.setToken(token, userInfo.getRoleId());
+		LoginResult loginResult = new LoginResult();
+		loginResult.setToken(token);
+		loginResult.setUserInfo(userInfo);
+		
+		return ResultBean.tokenKeyValid(loginResult);
 	}
 	
 	@Override

@@ -33,9 +33,9 @@ public class RedisServiceImpl implements RedisService
 	}
 	
 	@Override
-	public void setToken(String token, String userInfo)
+	public void setToken(String token, Integer userRoleId)
 	{
-		jedis.set(token, userInfo);
+		jedis.set(token, userRoleId.toString());
 		jedis.expire(token, TOKEN_LIFE_TIME);
 	}
 
@@ -46,7 +46,7 @@ public class RedisServiceImpl implements RedisService
 	}
 
 	@Override
-	public String getUserInfo(String token)
+	public String getUserRoleId(String token)
 	{
 		if(!jedis.exists(token)) return null;
 		return jedis.get(token);

@@ -12,7 +12,7 @@ import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
 
 public class AMapPointsUtils
 {
-	public static String key = "3306e4b1597495612f004aa2938e7f0a";
+	public static String key = "d8619be6ae77395055841ae5daa0e467";
 	
 	public static MatStaBean getNearestRoadPoint(MatStaBean p)
 	{
