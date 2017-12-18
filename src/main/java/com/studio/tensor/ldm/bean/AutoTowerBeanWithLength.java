@@ -36,7 +36,7 @@ public class AutoTowerBeanWithLength
 			
 			if(src.pointType.equals("turn"))
 			{
-				currentLengthSeek += length;
+				currentLengthSeek = length;
 				lastTurnBean = src;
 			}
 		}
