@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studio.tensor.ldm.dao.BendingCoefficientInfoMapper">
+  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.BendingCoefficientInfo">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="ground" jdbcType="DOUBLE" property="ground" />
+    <result column="river" jdbcType="DOUBLE" property="river" />
+    <result column="swamp" jdbcType="DOUBLE" property="swamp" />
+    <result column="hills" jdbcType="DOUBLE" property="hills" />
+    <result column="mountain" jdbcType="DOUBLE" property="mountain" />
+    <result column="higher_mountain" jdbcType="DOUBLE" property="higherMountain" />
+    <result column="highest_mountain" jdbcType="DOUBLE" property="highestMountain" />
+    <result column="desert" jdbcType="DOUBLE" property="desert" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, ground, river, swamp, hills, mountain, higher_mountain, highest_mountain, 
+    desert
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bending_coefficient_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bending_coefficient_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.BendingCoefficientInfo">
+    insert into bending_coefficient_info (user_id, ground, river, 
+      swamp, hills, mountain, 
+      higher_mountain, highest_mountain, desert
+      )
+    values (#{userId,jdbcType=INTEGER}, #{ground,jdbcType=DOUBLE}, #{river,jdbcType=DOUBLE}, 
+      #{swamp,jdbcType=DOUBLE}, #{hills,jdbcType=DOUBLE}, #{mountain,jdbcType=DOUBLE}, 
+      #{higherMountain,jdbcType=DOUBLE}, #{highestMountain,jdbcType=DOUBLE}, #{desert,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.BendingCoefficientInfo">
+    insert into bending_coefficient_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="ground != null">
+        ground,
+      </if>
+      <if test="river != null">
+        river,
+      </if>
+      <if test="swamp != null">
+        swamp,
+      </if>
+      <if test="hills != null">
+        hills,
+      </if>
+      <if test="mountain != null">
+        mountain,
+      </if>
+      <if test="higherMountain != null">
+        higher_mountain,
+      </if>
+      <if test="highestMountain != null">
+        highest_mountain,
+      </if>
+      <if test="desert != null">
+        desert,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="ground != null">
+        #{ground,jdbcType=DOUBLE},
+      </if>
+      <if test="river != null">
+        #{river,jdbcType=DOUBLE},
+      </if>
+      <if test="swamp != null">
+        #{swamp,jdbcType=DOUBLE},
+      </if>
+      <if test="hills != null">
+        #{hills,jdbcType=DOUBLE},
+      </if>
+      <if test="mountain != null">
+        #{mountain,jdbcType=DOUBLE},
+      </if>
+      <if test="higherMountain != null">
+        #{higherMountain,jdbcType=DOUBLE},
+      </if>
+      <if test="highestMountain != null">
+        #{highestMountain,jdbcType=DOUBLE},
+      </if>
+      <if test="desert != null">
+        #{desert,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.BendingCoefficientInfo">
+    update bending_coefficient_info
+    <set>
+      <if test="ground != null">
+        ground = #{ground,jdbcType=DOUBLE},
+      </if>
+      <if test="river != null">
+        river = #{river,jdbcType=DOUBLE},
+      </if>
+      <if test="swamp != null">
+        swamp = #{swamp,jdbcType=DOUBLE},
+      </if>
+      <if test="hills != null">
+        hills = #{hills,jdbcType=DOUBLE},
+      </if>
+      <if test="mountain != null">
+        mountain = #{mountain,jdbcType=DOUBLE},
+      </if>
+      <if test="higherMountain != null">
+        higher_mountain = #{higherMountain,jdbcType=DOUBLE},
+      </if>
+      <if test="highestMountain != null">
+        highest_mountain = #{highestMountain,jdbcType=DOUBLE},
+      </if>
+      <if test="desert != null">
+        desert = #{desert,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.BendingCoefficientInfo">
+    update bending_coefficient_info
+    set ground = #{ground,jdbcType=DOUBLE},
+      river = #{river,jdbcType=DOUBLE},
+      swamp = #{swamp,jdbcType=DOUBLE},
+      hills = #{hills,jdbcType=DOUBLE},
+      mountain = #{mountain,jdbcType=DOUBLE},
+      higher_mountain = #{higherMountain,jdbcType=DOUBLE},
+      highest_mountain = #{highestMountain,jdbcType=DOUBLE},
+      desert = #{desert,jdbcType=DOUBLE}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>
