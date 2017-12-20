@@ -26,6 +26,13 @@ public class PermissionController
 	}
 	
 	@ResponseBody
+	@RequestMapping("/getUserVisableRoleList")
+	public ResultBean getUserVisableRoleList()
+	{
+		return ResultBean.tokenKeyValid(permissionServiceImpl.getAllUserVisableNode());
+	}
+	
+	@ResponseBody
 	@RequestMapping("/insertRole")
 	public ResultBean insertRole(String roleName, String des)
 	{

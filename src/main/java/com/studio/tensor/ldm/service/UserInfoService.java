@@ -14,4 +14,6 @@ public interface UserInfoService
 	ResultBean userForgetPasswordRequest(String phoneNum);
 	ResultBean userForgetPasswordChange(String phoneNum, String confirmCode,
 			String newPassword);
+	
+	Boolean userRoleIdUpdate(Integer userId, Integer roleId);
 }

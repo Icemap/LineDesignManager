@@ -5,9 +5,11 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="des" property="des" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="user_visible" property="userVisible" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, role_name, des
+    id, role_name, des, price, user_visible
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -15,22 +17,22 @@
     from role_info
     where id = #{id,jdbcType=INTEGER}
   </select>
-  
+
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from role_info
   </select>
-  
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from role_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.RoleInfo" >
-    insert into role_info (id, role_name, des
-      )
-    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}
-      )
+    insert into role_info (id, role_name, des, 
+      price, user_visible)
+    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{userVisible,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.RoleInfo" >
     insert into role_info
@@ -44,6 +46,12 @@
       <if test="des != null" >
         des,
       </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="userVisible != null" >
+        user_visible,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -54,6 +62,12 @@
       </if>
       <if test="des != null" >
         #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="userVisible != null" >
+        #{userVisible,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -66,13 +80,21 @@
       <if test="des != null" >
         des = #{des,jdbcType=VARCHAR},
       </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="userVisible != null" >
+        user_visible = #{userVisible,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.RoleInfo" >
     update role_info
     set role_name = #{roleName,jdbcType=VARCHAR},
-      des = #{des,jdbcType=VARCHAR}
+      des = #{des,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      user_visible = #{userVisible,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,6 +2,7 @@ package com.studio.tensor.ldm.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.PermissionNode;
 import com.studio.tensor.ldm.dao.ApiInfoMapper;
 import com.studio.tensor.ldm.dao.ApiRoleMapper;
@@ -18,11 +21,13 @@ import com.studio.tensor.ldm.pojo.ApiInfo;
 import com.studio.tensor.ldm.pojo.ApiRole;
 import com.studio.tensor.ldm.pojo.RoleInfo;
 import com.studio.tensor.ldm.service.PermissionInfoService;
+import com.studio.tensor.ldm.utils.ByteBooleanUtils;
 
 @Service
 public class PermissionServiceImpl implements PermissionInfoService
 {
 	private List<PermissionNode> permissionNodeList;
+	private List<PermissionNode> permissionNodeListUserVisable;
 	private Map<String, List<Integer>> apiAllowMap;
 	
 	@Autowired
@@ -37,8 +42,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	@PostConstruct
 	private void onInit()
 	{
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 	}
 
 	@Override
@@ -48,8 +52,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 		roleInfo.setRoleName(roleName);
 		roleInfo.setDes(des);
 		roleInfoMapper.insertSelective(roleInfo);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -57,8 +60,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean deleteRole(Integer roleId)
 	{
 		roleInfoMapper.deleteByPrimaryKey(roleId);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -66,8 +68,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean updateRole(RoleInfo roleInfo)
 	{
 		roleInfoMapper.updateByPrimaryKey(roleInfo);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -78,8 +79,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 		apiInfo.setApiName(apiName);
 		apiInfo.setUrl(url);
 		apiInfoMapper.insertSelective(apiInfo);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -87,8 +87,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean deleteAPI(Integer apiId)
 	{
 		apiInfoMapper.deleteByPrimaryKey(apiId);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -96,8 +95,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean updateAPI(ApiInfo apiInfo)
 	{
 		apiInfoMapper.updateByPrimaryKeySelective(apiInfo);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -108,8 +106,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 		apiRole.setApiId(apiId);
 		apiRole.setRoleId(roleId);
 		apiRoleMapper.insertSelective(apiRole);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -117,8 +114,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean deleteApiRole(Integer apiRoleId)
 	{
 		apiRoleMapper.deleteByPrimaryKey(apiRoleId);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -126,8 +122,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean updateApiRole(ApiRole apiRole)
 	{
 		apiRoleMapper.updateByPrimaryKeySelective(apiRole);
-		buildNodeList();
-		buildApiAllowList();
+		buildCache();
 		return true;
 	}
 
@@ -135,6 +130,46 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public List<PermissionNode> getAllNode()
 	{
 		return permissionNodeList;
+	}
+	
+	@Override
+	public List<PermissionNode> getAllUserVisableNode()
+	{
+		return permissionNodeListUserVisable;
+	}
+	
+	/**
+	 * ---------------------------------
+	 * 		 以下为内/外部工具类函数
+	 * ---------------------------------
+	 */
+	private void buildCache()
+	{
+		buildNodeList();
+		buildApiAllowList();
+		buildUserVisableNodeList();
+	}
+	
+	//Json序列化深拷贝方式
+	private List<PermissionNode> permissionNodeListDeepClone()
+	{
+		String s = new Gson().toJson(permissionNodeList);
+		return new Gson().fromJson(s, new TypeToken<List<PermissionNode>>() {}.getType());
+	}
+	
+	/**
+	 * 基于 permissionNodeList，
+	 * 因此调用必须在buildNodeList()和buildApiAllowList()后
+	 */
+	private void buildUserVisableNodeList()
+	{
+		permissionNodeListUserVisable = permissionNodeListDeepClone();
+		for(Iterator<PermissionNode> it = permissionNodeListUserVisable.iterator(); it.hasNext(); ) 
+		{
+			PermissionNode node = it.next();
+			if(node.role.getUserVisible().equals(ByteBooleanUtils.falseByte))
+				it.remove();
+		}
 	}
 	
 	private void buildNodeList()

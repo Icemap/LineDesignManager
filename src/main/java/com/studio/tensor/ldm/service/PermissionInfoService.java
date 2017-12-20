@@ -26,4 +26,5 @@ public interface PermissionInfoService
 	
 	//Tree
 	List<PermissionNode> getAllNode();
+	List<PermissionNode> getAllUserVisableNode();
 }

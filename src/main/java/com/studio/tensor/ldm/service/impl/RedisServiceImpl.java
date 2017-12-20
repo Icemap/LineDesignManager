@@ -16,6 +16,8 @@ public class RedisServiceImpl implements RedisService
 	private Integer TOKEN_LIFE_TIME;
 	private Integer REGISTER_CODE_LIFE_TIME;
 	private String SMS_PHONE_KEY_HEADER;
+	private String PAY_KEY_HEADER;
+	private Integer PAY_CODE_LIFE_TIME;
 	
 	@PostConstruct
 	public void onInit()
@@ -23,7 +25,9 @@ public class RedisServiceImpl implements RedisService
         jedis = new Jedis("120.78.205.53", 8100);
         TOKEN_LIFE_TIME = 1800;
         REGISTER_CODE_LIFE_TIME = 600;
+        PAY_CODE_LIFE_TIME = 1800;
         SMS_PHONE_KEY_HEADER = "PHONE_";
+        PAY_KEY_HEADER = "PAY_";
 	}
 	
 	@PreDestroy
@@ -62,7 +66,7 @@ public class RedisServiceImpl implements RedisService
 	@Override
 	public Boolean getConfirmCode(String phoneNum, String code)
 	{
-		if(!jedis.exists(SMS_PHONE_KEY_HEADER + phoneNum)) return null;
+		if(!jedis.exists(SMS_PHONE_KEY_HEADER + phoneNum)) return false;
 		
 		String getCode = jedis.get(SMS_PHONE_KEY_HEADER + phoneNum);
 		if(getCode.equals(code))
@@ -79,5 +83,25 @@ public class RedisServiceImpl implements RedisService
 	{
 		return jedis.exists(key);
 	}
-	
+
+	@Override
+	public void setPayConfirmCode(Integer userId, String code)
+	{
+		jedis.set(PAY_KEY_HEADER + userId, code);
+		jedis.expire(PAY_KEY_HEADER + userId, PAY_CODE_LIFE_TIME);
+	}
+
+	@Override
+	public Boolean isPayConfirm(Integer userId, String code)
+	{
+		if(!jedis.exists(PAY_KEY_HEADER + userId)) return false;
+		String getCode = jedis.get(PAY_KEY_HEADER + userId);
+		if(getCode.equals(code))
+		{
+			jedis.del(PAY_KEY_HEADER + userId);
+			return true;
+		}
+		else
+			return false;
+	}
 }

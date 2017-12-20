@@ -36,7 +36,11 @@ public class UserInfoServiceImpl implements UserInfoService
 		UserInfo userInfo = userInfoMapper.userLogin(
 				phoneNum, HashUtils.getMD5(password));
 		String token = HashUtils.getMD5(phoneNum + new Date().toString());
-		redisServiceImpl.setToken(token, userInfo.getRoleId());
+		Integer roleId = userInfo.getRoleId();
+		if(roleId == null)
+			redisServiceImpl.setToken(token, null);
+		else
+			redisServiceImpl.setToken(token, roleId);
 		LoginResult loginResult = new LoginResult();
 		loginResult.setToken(token);
 		loginResult.setUserInfo(userInfo);
@@ -98,5 +102,14 @@ public class UserInfoServiceImpl implements UserInfoService
 		if(!isCompare) return ResultBean.tokenKeyNotValid();
 		
 		return ResultBean.tokenKeyValid(userInfoMapper.updatePasswordByPhone(phoneNum, newPassword) == 1);
+	}
+
+	@Override
+	public Boolean userRoleIdUpdate(Integer userId, Integer roleId)
+	{
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(userId);
+		userInfo.setRoleId(roleId);
+		return userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1;
 	}
 }

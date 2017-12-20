@@ -7,6 +7,10 @@ public class RoleInfo {
 
     private String des;
 
+    private Long price;
+
+    private Byte userVisible;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +33,21 @@ public class RoleInfo {
 
     public void setDes(String des) {
         this.des = des == null ? null : des.trim();
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Byte getUserVisible() {
+        return userVisible;
+    }
+
+    public void setUserVisible(Byte userVisible) {
+        this.userVisible = userVisible;
     }
 }
