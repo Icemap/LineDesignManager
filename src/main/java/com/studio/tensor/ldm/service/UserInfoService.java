@@ -1,8 +1,11 @@
 package com.studio.tensor.ldm.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.studio.tensor.ldm.bean.ResultBean;
+import com.studio.tensor.ldm.pojo.UserInfo;
 
 public interface UserInfoService
 {
@@ -16,4 +19,6 @@ public interface UserInfoService
 			String newPassword);
 	
 	Boolean userRoleIdUpdate(Integer userId, Integer roleId);
+	List<UserInfo> getAllUser(Integer start, Integer size);
+	Integer getUserNumber();
 }

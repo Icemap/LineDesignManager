@@ -1,6 +1,7 @@
 package com.studio.tensor.ldm.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,7 @@ public class UserInfoServiceImpl implements UserInfoService
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPhoneNumber(phoneNum);
 		userInfo.setPassword(HashUtils.getMD5(password));
+		userInfo.setRoleId(0);
 		return ResultBean.tokenKeyValid(
 				userInfoMapper.insertSelective(userInfo) == 1);
 	}
@@ -111,5 +113,17 @@ public class UserInfoServiceImpl implements UserInfoService
 		userInfo.setId(userId);
 		userInfo.setRoleId(roleId);
 		return userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1;
+	}
+
+	@Override
+	public List<UserInfo> getAllUser(Integer start, Integer size)
+	{
+		return userInfoMapper.getAllUser(start, size);
+	}
+
+	@Override
+	public Integer getUserNumber()
+	{
+		return userInfoMapper.getUserNumber();
 	}
 }

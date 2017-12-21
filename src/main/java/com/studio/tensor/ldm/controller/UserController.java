@@ -18,52 +18,73 @@ public class UserController
 	
 	@ResponseBody
 	@RequestMapping("/login")
-	ResultBean userLogin(String phoneNum, String password)
+	public ResultBean userLogin(String phoneNum, String password)
 	{
 		return userInfoServiceImpl.userLogin(phoneNum, password);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/register/sendCode")
-	ResultBean userRegisterSendCode(String phoneNum)
+	public ResultBean userRegisterSendCode(String phoneNum)
 	{
 		return userInfoServiceImpl.userRegisterSendCode(phoneNum);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/register")
-	ResultBean userRegister(String phoneNum, String password, String code)
+	public ResultBean userRegister(String phoneNum, String password, String code)
 	{
 		return userInfoServiceImpl.userRegister(phoneNum, password, code);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/nickname/update")
-	ResultBean userUpdateNickName(Integer id, String nickName)
+	public ResultBean userUpdateNickName(Integer id, String nickName)
 	{
 		return userInfoServiceImpl.userUpdateNickName(id, nickName);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/icon/update")
-	ResultBean userUpdateIcon(Integer id, MultipartFile icon)
+	public ResultBean userUpdateIcon(Integer id, MultipartFile icon)
 	{
 		return userInfoServiceImpl.userUpdateIcon(id, icon);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/password/update/sendCode")
-	ResultBean userForgetPasswordRequest(String phoneNum)
+	public ResultBean userForgetPasswordRequest(String phoneNum)
 	{
 		return userInfoServiceImpl.userForgetPasswordRequest(phoneNum);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/password/update")
-	ResultBean userForgetPasswordChange(
+	public ResultBean userForgetPasswordChange(
 			String phoneNum, String confirmCode, String newPassword)
 	{
 		return userInfoServiceImpl.userForgetPasswordChange(
 				phoneNum, confirmCode, newPassword);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/loginBackground")
+	public ResultBean loginBackground(String adminAccount, String adminPassword)
+	{
+		return userInfoServiceImpl.userLogin(adminAccount, adminPassword);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getAllUser")
+	public ResultBean getAllUser(Integer start, Integer size)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.getAllUser(start, size));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getUserNumber")
+	public ResultBean getUserNumber()
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.getUserNumber().intValue());
 	}
 }

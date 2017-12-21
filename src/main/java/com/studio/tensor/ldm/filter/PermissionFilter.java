@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.studio.tensor.ldm.bean.LoginResult;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.dao.ApiInfoMapper;
 import com.studio.tensor.ldm.service.impl.PermissionServiceImpl;
 import com.studio.tensor.ldm.service.impl.RedisServiceImpl;
+import com.studio.tensor.ldm.service.impl.UserInfoServiceImpl;
 import com.studio.tensor.ldm.utils.SpringContextUtils;
 
 public class PermissionFilter implements Filter
@@ -23,6 +25,7 @@ public class PermissionFilter implements Filter
 	ApiInfoMapper apiInfoMapper;
 	PermissionServiceImpl permissionServiceImpl;
 	RedisServiceImpl redisServiceImpl;
+	UserInfoServiceImpl userInfoServiceImpl;
 	
 	@Override
 	public void init(FilterConfig arg0) throws ServletException
@@ -30,6 +33,7 @@ public class PermissionFilter implements Filter
 		apiInfoMapper = SpringContextUtils.getBean("apiInfoMapper", ApiInfoMapper.class);
 		permissionServiceImpl = SpringContextUtils.getBean("permissionServiceImpl", PermissionServiceImpl.class);
 		redisServiceImpl = SpringContextUtils.getBean("redisServiceImpl", RedisServiceImpl.class);
+		userInfoServiceImpl = SpringContextUtils.getBean("userInfoServiceImpl", UserInfoServiceImpl.class);
 	}
 	
 	@Override
@@ -48,12 +52,21 @@ public class PermissionFilter implements Filter
 		
 		//得到用户的RoleId
 		String token = hreq.getParameter("token");
+		if(path.equals("/user/loginBackground"))
+		{
+			ResultBean adminBean = userInfoServiceImpl.userLogin(
+					hreq.getParameter("adminAccount"), 
+					hreq.getParameter("adminPassword"));
+			if(adminBean.getCode().equals(200))
+				token = ((LoginResult)(adminBean.getResultBean())).getToken();
+		}
+			
 		if(token != null)
 		{
 			String sRoleId = redisServiceImpl.getUserRoleId(token);
 			if(sRoleId != null && !sRoleId.equals(""))
 			{
-				Integer userRoleId = Integer.getInteger(sRoleId);
+				Integer userRoleId = Integer.parseInt(sRoleId);
 				if(permissionServiceImpl.isRoleAllowThisApi(path, userRoleId))
 				{
 					chain.doFilter(req, res);
