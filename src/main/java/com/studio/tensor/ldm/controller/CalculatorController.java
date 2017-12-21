@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.AutoTowerBean;
 import com.studio.tensor.ldm.bean.AutoTowerBeanWithLength;
+import com.studio.tensor.ldm.bean.GeoCodeResultBean;
 import com.studio.tensor.ldm.bean.LatLngInfo;
 import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean.PointBean;
@@ -234,12 +235,25 @@ public class CalculatorController
 		}
 		
 		List<MatStaBean> midList = AutoSetUtils.getAllMidPoint(pointList, staNum);
-		List<MatStaBean> resultList = new ArrayList<>();
-		for(MatStaBean srcBean: midList)
+		List<MatStaBean> resultList = AMapPointsUtils.getNearestRoadPointThread(midList);
+		return resultList;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/autoGeoCode")
+	public GeoCodeResultBean autoGeoCode(String jsonCoodList)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
 		{
-			resultList.add(AMapPointsUtils.getNearestRoadPoint(srcBean));
+			LatLngInfo lli = CoodUtils.lonLatToMercator(cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(lli.getLongitude(), lli.getLatitude()));
 		}
 		
-		return resultList;
+		List<LatLngInfo> llil = AutoSetUtils.getAllLengthPoint(pointList, 500.0);
+		GeoCodeResultBean geoCodeResultBean = AMapPointsUtils.getPointGeoCodeThread(llil);
+		return geoCodeResultBean;
 	}
 }

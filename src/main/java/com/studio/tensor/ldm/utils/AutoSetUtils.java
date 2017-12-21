@@ -3,6 +3,7 @@ package com.studio.tensor.ldm.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.studio.tensor.ldm.bean.LatLngInfo;
 import com.studio.tensor.ldm.bean.MatStaBean;
 import com.studio.tensor.ldm.bean.PolylineBean;
 import com.studio.tensor.ldm.bean.PolylineBean.LineMethod;
@@ -152,6 +153,20 @@ public class AutoSetUtils
 			msb.setStartLength(avgLength * i);
 			msb.setEndLength(avgLength * i + avgLength);
 			resultList.add(msb);
+		}
+		return resultList;
+	}
+	
+	public static List<LatLngInfo> getAllLengthPoint(List<PointBean> pointList, Double length)
+	{
+		Double allLength = AutoSetUtils.getAllLength(pointList);
+		Integer staNum = (int)(allLength / length);
+		
+		List<LatLngInfo> resultList = new ArrayList<>();
+		for(int i = 0;i < staNum;i++)
+		{
+			PointBean pb = getPointByLength(pointList, i * length + length);
+			resultList.add(new LatLngInfo(pb.y, pb.x));
 		}
 		return resultList;
 	}

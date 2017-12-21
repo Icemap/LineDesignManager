@@ -42,16 +42,18 @@ public class PermissionFilter implements Filter
 	{
 		HttpServletRequest hreq = (HttpServletRequest) req;
 		String path = hreq.getServletPath();
+		String token = hreq.getParameter("token");
 		
 		//黑名单模式，无记录的直接通过
 		if(!permissionServiceImpl.isApiExist(path))
 		{
+			if(token != null && redisServiceImpl.isExist(token))
+				redisServiceImpl.refreshToken(token);
 			chain.doFilter(req, res);
 			return;
 		}  
 		
 		//得到用户的RoleId
-		String token = hreq.getParameter("token");
 		if(path.equals("/user/loginBackground"))
 		{
 			ResultBean adminBean = userInfoServiceImpl.userLogin(
@@ -69,6 +71,7 @@ public class PermissionFilter implements Filter
 				Integer userRoleId = Integer.parseInt(sRoleId);
 				if(permissionServiceImpl.isRoleAllowThisApi(path, userRoleId))
 				{
+					redisServiceImpl.refreshToken(token);
 					chain.doFilter(req, res);
 					return;
 				}
