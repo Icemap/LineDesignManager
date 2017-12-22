@@ -13,6 +13,8 @@ public interface UserInfoMapper {
 
     int insertSelective(UserInfo record);
 
+    Integer userPhoneCount(@Param("phoneNum")String phoneNum);
+    
     UserInfo selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(UserInfo record);

@@ -16,6 +16,28 @@
     from file_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectFileInfoByUserId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from file_info
+    where belong_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUserIdAndTag" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from file_info
+    where belong_user_id = #{userId,jdbcType=INTEGER}
+      and tag = #{tag,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectTagByUserId" resultType="java.lang.String">
+    select DISTINCT tag
+    from file_info
+    where belong_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from file_info
     where id = #{id,jdbcType=INTEGER}

@@ -21,4 +21,6 @@ public interface UserInfoService
 	Boolean userRoleIdUpdate(Integer userId, Integer roleId);
 	List<UserInfo> getAllUser(Integer start, Integer size);
 	Integer getUserNumber();
+	Boolean userDelete(Integer userId);
+	Boolean userInsert(String phoneNum, String password, Integer roleId);
 }

@@ -1,5 +1,7 @@
 package com.studio.tensor.ldm.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,5 +32,23 @@ public class FileInfoServiceImpl implements FileService
 	{
 		String name = FileUtils.saveFile(file, fileSetting.getSaveFilePath());
 		return fileSetting.getGetFilePath() + name;
+	}
+
+	@Override
+	public List<FileInfo> selectFileInfoByUserId(Integer userId)
+	{
+		return fileInfoMapper.selectFileInfoByUserId(userId);
+	}
+
+	@Override
+	public List<FileInfo> selectByUserIdAndTag(Integer userId, String tag)
+	{
+		return fileInfoMapper.selectByUserIdAndTag(userId, tag);
+	}
+
+	@Override
+	public List<String> selectTagByUserId(Integer userId)
+	{
+		return fileInfoMapper.selectTagByUserId(userId);
 	}
 }

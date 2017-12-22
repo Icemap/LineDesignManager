@@ -29,6 +29,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	private List<PermissionNode> permissionNodeList;
 	private List<PermissionNode> permissionNodeListUserVisable;
 	private Map<String, List<Integer>> apiAllowMap;
+	private List<ApiInfo> apiList;
 	
 	@Autowired
 	RoleInfoMapper roleInfoMapper;
@@ -46,11 +47,14 @@ public class PermissionServiceImpl implements PermissionInfoService
 	}
 
 	@Override
-	public Boolean insertRole(String roleName, String des)
+	public Boolean insertRole(String roleName, String des,
+			Long price, Boolean userVisible)
 	{
 		RoleInfo roleInfo = new RoleInfo();
 		roleInfo.setRoleName(roleName);
 		roleInfo.setDes(des);
+		roleInfo.setPrice(price);
+		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
 		roleInfoMapper.insertSelective(roleInfo);
 		buildCache();
 		return true;
@@ -176,7 +180,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 	{
 		permissionNodeList = new ArrayList<>();
 		List<RoleInfo> roleList = roleInfoMapper.selectAll();
-		List<ApiInfo> apiList = apiInfoMapper.selectAll();
+		apiList = apiInfoMapper.selectAll();
 		List<ApiRole> apiRoleList = apiRoleMapper.selectAll();
 		
 		Map<Integer, Integer> apiIdMap = new HashMap<>();
@@ -234,5 +238,11 @@ public class PermissionServiceImpl implements PermissionInfoService
 	public Boolean isRoleAllowThisApi(String apiPath, Integer roleId)
 	{
 		return apiAllowMap.get(apiPath).contains(roleId);
+	}
+
+	@Override
+	public List<ApiInfo> getAPIList()
+	{
+		return apiList;
 	}
 }

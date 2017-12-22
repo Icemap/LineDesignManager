@@ -10,7 +10,8 @@ import com.studio.tensor.ldm.pojo.RoleInfo;
 public interface PermissionInfoService
 {
 	//Role
-	Boolean insertRole(String roleName, String des);
+	Boolean insertRole(String roleName, String des,
+			Long price, Boolean userVisible);
 	Boolean deleteRole(Integer roleId);
 	Boolean updateRole(RoleInfo roleInfo);
 	
@@ -18,6 +19,7 @@ public interface PermissionInfoService
 	Boolean insertAPI(String apiName, String url);
 	Boolean deleteAPI(Integer apiId);
 	Boolean updateAPI(ApiInfo apiInfo);
+	List<ApiInfo> getAPIList();
 	
 	//API-Role
 	Boolean insertApiRole(Integer apiId, Integer roleId);

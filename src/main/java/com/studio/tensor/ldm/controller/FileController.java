@@ -38,4 +38,28 @@ public class FileController
 		fileInfo.setTag(tag);
 		return ResultBean.tokenKeyValid(fileInfoServiceImpl.insertFileByUser(fileInfo));
 	}
+	
+	@ResponseBody
+	@RequestMapping("/selectFileInfoByUserId")
+	public ResultBean selectFileInfoByUserId(Integer userId)
+	{
+		return ResultBean.tokenKeyValid(
+				fileInfoServiceImpl.selectFileInfoByUserId(userId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectByUserIdAndTag")
+	public ResultBean selectByUserIdAndTag(Integer userId, String tag)
+	{
+		return ResultBean.tokenKeyValid(
+				fileInfoServiceImpl.selectByUserIdAndTag(userId, tag));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectTagByUserId")
+	public ResultBean selectTagByUserId(Integer userId)
+	{
+		return ResultBean.tokenKeyValid(
+				fileInfoServiceImpl.selectTagByUserId(userId));
+	}
 }

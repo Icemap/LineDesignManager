@@ -52,7 +52,11 @@ public class UserInfoServiceImpl implements UserInfoService
 	@Override
 	public ResultBean userRegisterSendCode(String phoneNum)
 	{
-		return ResultBean.tokenKeyValid(smsServiceImpl.getRegisterCode(phoneNum));
+		if(userInfoMapper.userPhoneCount(phoneNum) != 0)
+			return ResultBean.phoneNumExist();
+		
+		return ResultBean.tokenKeyValid(
+				smsServiceImpl.getRegisterCode(phoneNum));
 	}
 	
 	@Override
@@ -125,5 +129,24 @@ public class UserInfoServiceImpl implements UserInfoService
 	public Integer getUserNumber()
 	{
 		return userInfoMapper.getUserNumber();
+	}
+
+	@Override
+	public Boolean userDelete(Integer userId)
+	{
+		return userInfoMapper.deleteByPrimaryKey(userId) == 1;
+	}
+
+	@Override
+	public Boolean userInsert(String phoneNum, String password, Integer roleId)
+	{
+		if(userInfoMapper.userPhoneCount(phoneNum) != 0)
+			return false;
+		
+		UserInfo userInfo = new UserInfo();
+		userInfo.setPhoneNumber(phoneNum);
+		userInfo.setPassword(HashUtils.getMD5(password));
+		userInfo.setRoleId(roleId);
+		return userInfoMapper.insertSelective(userInfo) == 1;
 	}
 }

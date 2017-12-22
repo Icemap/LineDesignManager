@@ -10,6 +10,7 @@ import com.studio.tensor.ldm.pojo.ApiInfo;
 import com.studio.tensor.ldm.pojo.ApiRole;
 import com.studio.tensor.ldm.pojo.RoleInfo;
 import com.studio.tensor.ldm.service.impl.PermissionServiceImpl;
+import com.studio.tensor.ldm.utils.ByteBooleanUtils;
 
 @Controller
 @RequestMapping("/permission")
@@ -34,10 +35,11 @@ public class PermissionController
 	
 	@ResponseBody
 	@RequestMapping("/insertRole")
-	public ResultBean insertRole(String roleName, String des)
+	public ResultBean insertRole(String roleName, String des,
+			Long price, Boolean userVisible)
 	{
 		return ResultBean.tokenKeyValid(
-				permissionServiceImpl.insertRole(roleName, des));
+				permissionServiceImpl.insertRole(roleName, des, price, userVisible));
 	}
 	
 	@ResponseBody
@@ -50,12 +52,16 @@ public class PermissionController
 	
 	@ResponseBody
 	@RequestMapping("/updateRole")
-	public ResultBean updateRole(Integer roleId, String roleName, String des)
+	public ResultBean updateRole(Integer roleId, String roleName, String des,
+			Long price, Boolean userVisible)
 	{
 		RoleInfo roleInfo = new RoleInfo();
 		roleInfo.setId(roleId);
 		roleInfo.setDes(des);
 		roleInfo.setRoleName(roleName);
+		roleInfo.setPrice(price);
+		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
+		
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.updateRole(roleInfo));
 	}
@@ -114,5 +120,12 @@ public class PermissionController
 		apiRole.setRoleId(roleId);
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.updateApiRole(apiRole));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getAPIList")
+	public ResultBean getAPIList()
+	{
+		return ResultBean.tokenKeyValid(permissionServiceImpl.getAPIList());
 	}
 }

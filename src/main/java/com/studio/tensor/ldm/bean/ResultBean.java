@@ -8,6 +8,7 @@ public class ResultBean
 	 * 403 : 用户名错误或密码错误
 	 * 405 : Token 不合法
 	 * 406 : 非管理员身份
+	 * 407 : 该手机已经注册
 	 */
 	private Integer code;
 	private String message;
@@ -77,6 +78,15 @@ public class ResultBean
 		ResultBean result = new ResultBean();
 		result.setCode(401);
 		result.setMessage("用户权限不足");
+		return result;
+	}
+	
+
+	public static ResultBean phoneNumExist()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(407);
+		result.setMessage("该手机已经注册");
 		return result;
 	}
 	

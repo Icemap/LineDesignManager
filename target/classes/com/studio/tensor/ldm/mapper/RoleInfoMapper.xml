@@ -8,6 +8,7 @@
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="user_visible" property="userVisible" jdbcType="TINYINT" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     id, role_name, des, price, user_visible
   </sql>

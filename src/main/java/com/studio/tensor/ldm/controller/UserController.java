@@ -87,4 +87,25 @@ public class UserController
 	{
 		return ResultBean.tokenKeyValid(userInfoServiceImpl.getUserNumber().intValue());
 	}
+	
+	@ResponseBody
+	@RequestMapping("/adminUpdateUserRole")
+	public ResultBean adminUpdateUserRole(Integer userId, Integer roleId)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.userRoleIdUpdate(userId, roleId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/adminAddUser")
+	public ResultBean adminAddUser(String phoneNum, String password, Integer roleId)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.userInsert(phoneNum, password, roleId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/adminDeleteUser")
+	public ResultBean adminDeleteUser(Integer userId)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.userDelete(userId));
+	}
 }
