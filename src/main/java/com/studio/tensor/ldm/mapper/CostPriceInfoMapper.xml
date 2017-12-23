@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studio.tensor.ldm.dao.CostPriceInfoMapper">
+  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.CostPriceInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="row_num" jdbcType="INTEGER" property="rowNum" />
+    <result column="section_area" jdbcType="INTEGER" property="sectionArea" />
+    <result column="loop_num" jdbcType="INTEGER" property="loopNum" />
+    <result column="terrain_name" jdbcType="VARCHAR" property="terrainName" />
+    <result column="self_price" jdbcType="DOUBLE" property="selfPrice" />
+    <result column="extra_price" jdbcType="DOUBLE" property="extraPrice" />
+    <result column="static_price" jdbcType="DOUBLE" property="staticPrice" />
+    <result column="voltage_level" jdbcType="INTEGER" property="voltageLevel" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, row_num, section_area, loop_num, terrain_name, self_price, extra_price, static_price, 
+    voltage_level, tag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getTag" resultType="java.lang.String">
+    select DISTINCT tag 
+    from cost_price_info
+  </select>
+  <select id="selectByTag" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_info
+    where tag = #{tag,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByMsg" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_info
+    where tag = #{tag,jdbcType=VARCHAR}
+      and row_num = #{rowNum,jdbcType=INTEGER}
+      and section_area = #{sectionArea,jdbcType=INTEGER}
+      and loop_num = #{loopNum,jdbcType=INTEGER}
+      and voltage_level = #{voltageLevel,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cost_price_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.CostPriceInfo">
+    insert into cost_price_info (id, row_num, section_area, 
+      loop_num, terrain_name, self_price, 
+      extra_price, static_price, voltage_level, 
+      tag)
+    values (#{id,jdbcType=INTEGER}, #{rowNum,jdbcType=INTEGER}, #{sectionArea,jdbcType=INTEGER}, 
+      #{loopNum,jdbcType=INTEGER}, #{terrainName,jdbcType=VARCHAR}, #{selfPrice,jdbcType=DOUBLE}, 
+      #{extraPrice,jdbcType=DOUBLE}, #{staticPrice,jdbcType=DOUBLE}, #{voltageLevel,jdbcType=INTEGER}, 
+      #{tag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.CostPriceInfo">
+    insert into cost_price_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="rowNum != null">
+        row_num,
+      </if>
+      <if test="sectionArea != null">
+        section_area,
+      </if>
+      <if test="loopNum != null">
+        loop_num,
+      </if>
+      <if test="terrainName != null">
+        terrain_name,
+      </if>
+      <if test="selfPrice != null">
+        self_price,
+      </if>
+      <if test="extraPrice != null">
+        extra_price,
+      </if>
+      <if test="staticPrice != null">
+        static_price,
+      </if>
+      <if test="voltageLevel != null">
+        voltage_level,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="rowNum != null">
+        #{rowNum,jdbcType=INTEGER},
+      </if>
+      <if test="sectionArea != null">
+        #{sectionArea,jdbcType=INTEGER},
+      </if>
+      <if test="loopNum != null">
+        #{loopNum,jdbcType=INTEGER},
+      </if>
+      <if test="terrainName != null">
+        #{terrainName,jdbcType=VARCHAR},
+      </if>
+      <if test="selfPrice != null">
+        #{selfPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="extraPrice != null">
+        #{extraPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="staticPrice != null">
+        #{staticPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="voltageLevel != null">
+        #{voltageLevel,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.CostPriceInfo">
+    update cost_price_info
+    <set>
+      <if test="rowNum != null">
+        row_num = #{rowNum,jdbcType=INTEGER},
+      </if>
+      <if test="sectionArea != null">
+        section_area = #{sectionArea,jdbcType=INTEGER},
+      </if>
+      <if test="loopNum != null">
+        loop_num = #{loopNum,jdbcType=INTEGER},
+      </if>
+      <if test="terrainName != null">
+        terrain_name = #{terrainName,jdbcType=VARCHAR},
+      </if>
+      <if test="selfPrice != null">
+        self_price = #{selfPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="extraPrice != null">
+        extra_price = #{extraPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="staticPrice != null">
+        static_price = #{staticPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="voltageLevel != null">
+        voltage_level = #{voltageLevel,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.CostPriceInfo">
+    update cost_price_info
+    set row_num = #{rowNum,jdbcType=INTEGER},
+      section_area = #{sectionArea,jdbcType=INTEGER},
+      loop_num = #{loopNum,jdbcType=INTEGER},
+      terrain_name = #{terrainName,jdbcType=VARCHAR},
+      self_price = #{selfPrice,jdbcType=DOUBLE},
+      extra_price = #{extraPrice,jdbcType=DOUBLE},
+      static_price = #{staticPrice,jdbcType=DOUBLE},
+      voltage_level = #{voltageLevel,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

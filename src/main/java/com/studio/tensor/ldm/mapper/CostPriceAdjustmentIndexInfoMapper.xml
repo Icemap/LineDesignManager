@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studio.tensor.ldm.dao.CostPriceAdjustmentIndexInfoMapper">
+  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.CostPriceAdjustmentIndexInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="voltage_level" jdbcType="INTEGER" property="voltageLevel" />
+    <result column="loop_num" jdbcType="INTEGER" property="loopNum" />
+    <result column="max_standard_value" jdbcType="DOUBLE" property="maxStandardValue" />
+    <result column="des" jdbcType="VARCHAR" property="des" />
+    <result column="adjustment_index" jdbcType="DOUBLE" property="adjustmentIndex" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, voltage_level, loop_num, max_standard_value, des, adjustment_index, type, tag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_adjustment_index_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTag"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_adjustment_index_info
+    where tag = #{tag,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectIceInfoByMsg"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_adjustment_index_info
+    where tag = #{tag,jdbcType=VARCHAR}
+      and voltage_level = #{voltageLevel,jdbcType=INTEGER}
+      and loop_num = #{loopNum,jdbcType=INTEGER}
+      and type = "覆冰厚度"
+      and max_standard_value &lt;= #{iceHeight,jdbcType=DOUBLE}
+  </select>
+  <select id="selectWindInfoByMsg"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_adjustment_index_info
+    where tag = #{tag,jdbcType=VARCHAR}
+      and voltage_level = #{voltageLevel,jdbcType=INTEGER}
+      and type = "风速"
+      and max_standard_value &lt;= #{windSpeed,jdbcType=DOUBLE}
+  </select>
+  <select id="selectHumanInfoByMsg"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_price_adjustment_index_info
+    where tag = #{tag,jdbcType=VARCHAR}
+      and voltage_level = #{voltageLevel,jdbcType=INTEGER}
+      and type = "人力运距"
+      and max_standard_value &lt;= #{humanLength,jdbcType=DOUBLE}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cost_price_adjustment_index_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.CostPriceAdjustmentIndexInfo">
+    insert into cost_price_adjustment_index_info (id, voltage_level, loop_num, 
+      max_standard_value, des, adjustment_index, 
+      type, tag)
+    values (#{id,jdbcType=INTEGER}, #{voltageLevel,jdbcType=INTEGER}, #{loopNum,jdbcType=INTEGER}, 
+      #{maxStandardValue,jdbcType=DOUBLE}, #{des,jdbcType=VARCHAR}, #{adjustmentIndex,jdbcType=DOUBLE}, 
+      #{type,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.CostPriceAdjustmentIndexInfo">
+    insert into cost_price_adjustment_index_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="voltageLevel != null">
+        voltage_level,
+      </if>
+      <if test="loopNum != null">
+        loop_num,
+      </if>
+      <if test="maxStandardValue != null">
+        max_standard_value,
+      </if>
+      <if test="des != null">
+        des,
+      </if>
+      <if test="adjustmentIndex != null">
+        adjustment_index,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="voltageLevel != null">
+        #{voltageLevel,jdbcType=INTEGER},
+      </if>
+      <if test="loopNum != null">
+        #{loopNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxStandardValue != null">
+        #{maxStandardValue,jdbcType=DOUBLE},
+      </if>
+      <if test="des != null">
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustmentIndex != null">
+        #{adjustmentIndex,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.CostPriceAdjustmentIndexInfo">
+    update cost_price_adjustment_index_info
+    <set>
+      <if test="voltageLevel != null">
+        voltage_level = #{voltageLevel,jdbcType=INTEGER},
+      </if>
+      <if test="loopNum != null">
+        loop_num = #{loopNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxStandardValue != null">
+        max_standard_value = #{maxStandardValue,jdbcType=DOUBLE},
+      </if>
+      <if test="des != null">
+        des = #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustmentIndex != null">
+        adjustment_index = #{adjustmentIndex,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.CostPriceAdjustmentIndexInfo">
+    update cost_price_adjustment_index_info
+    set voltage_level = #{voltageLevel,jdbcType=INTEGER},
+      loop_num = #{loopNum,jdbcType=INTEGER},
+      max_standard_value = #{maxStandardValue,jdbcType=DOUBLE},
+      des = #{des,jdbcType=VARCHAR},
+      adjustment_index = #{adjustmentIndex,jdbcType=DOUBLE},
+      type = #{type,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
