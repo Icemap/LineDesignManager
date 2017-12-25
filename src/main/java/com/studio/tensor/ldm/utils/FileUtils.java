@@ -125,7 +125,7 @@ public class FileUtils
 	{
 		String extName = file.getOriginalFilename().substring(file.
 				getOriginalFilename().lastIndexOf(".")).toLowerCase(); 
-		String fileName = (new Date()).toString() + "." + extName;
+		String fileName = new Date().getTime() + extName;
 		
 		saveFile(safeGetInputStream(file), fileName, path);
 		return fileName;
@@ -167,7 +167,9 @@ public class FileUtils
 		{
 			try
 			{
+				if(os != null)
 				os.close();
+				if(inputStream != null)
 				inputStream.close();
 			} 
 			catch (IOException e)

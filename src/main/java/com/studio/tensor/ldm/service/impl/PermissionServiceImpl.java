@@ -130,6 +130,34 @@ public class PermissionServiceImpl implements PermissionInfoService
 		return true;
 	}
 
+
+	@Override
+	public Boolean insertApiRoleMuti(List<ApiRole> apiRoles)
+	{
+		for(ApiRole apiRole : apiRoles)
+			apiRoleMapper.insertSelective(apiRole);
+		buildCache();
+		return true;
+	}
+
+	@Override
+	public Boolean deleteApiRoleMuti(List<Integer> apiRoleIds)
+	{
+		for(Integer apiRoleId : apiRoleIds)
+			apiRoleMapper.deleteByPrimaryKey(apiRoleId);
+		buildCache();
+		return true;
+	}
+
+	@Override
+	public Boolean updateApiRoleMuti(List<ApiRole> apiRoles)
+	{
+		for(ApiRole apiRole : apiRoles)
+			apiRoleMapper.updateByPrimaryKeySelective(apiRole);
+		buildCache();
+		return true;
+	}
+	
 	@Override
 	public List<PermissionNode> getAllNode()
 	{

@@ -29,4 +29,9 @@ public interface PermissionInfoService
 	//Tree
 	List<PermissionNode> getAllNode();
 	List<PermissionNode> getAllUserVisableNode();
+	
+	//Muti
+	Boolean insertApiRoleMuti(List<ApiRole> apiRoles);
+	Boolean deleteApiRoleMuti(List<Integer> apiRoleIds);
+	Boolean updateApiRoleMuti(List<ApiRole> apiRoles);
 }

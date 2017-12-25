@@ -1,10 +1,14 @@
 package com.studio.tensor.ldm.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.pojo.ApiInfo;
 import com.studio.tensor.ldm.pojo.ApiRole;
@@ -103,11 +107,31 @@ public class PermissionController
 	}
 	
 	@ResponseBody
+	@RequestMapping("/insertApiRole/muti")
+	public ResultBean insertApiRoleMuti(String jsonApiRoles)
+	{
+		List<ApiRole> apiRoles = new Gson().fromJson(
+				jsonApiRoles, new TypeToken<List<ApiRole>>() {}.getType());
+		return ResultBean.tokenKeyValid(
+				permissionServiceImpl.insertApiRoleMuti(apiRoles));
+	}
+	
+	@ResponseBody
 	@RequestMapping("/deleteApiRole")
 	public ResultBean deleteApiRole(Integer apiRoleId)
 	{
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.deleteApiRole(apiRoleId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/deleteApiRole/muti")
+	public ResultBean deleteApiRoleMuti(String jsonApiRoleIds)
+	{
+		List<Integer> apiRoleIds = new Gson().fromJson(
+				jsonApiRoleIds, new TypeToken<List<Integer>>() {}.getType());
+		return ResultBean.tokenKeyValid(
+				permissionServiceImpl.deleteApiRoleMuti(apiRoleIds));
 	}
 	
 	@ResponseBody
@@ -120,6 +144,16 @@ public class PermissionController
 		apiRole.setRoleId(roleId);
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.updateApiRole(apiRole));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/updateApiRole/muti")
+	public ResultBean updateApiRoleMuti(String jsonApiRoles)
+	{
+		List<ApiRole> apiRoles = new Gson().fromJson(
+				jsonApiRoles, new TypeToken<List<ApiRole>>() {}.getType());
+		return ResultBean.tokenKeyValid(
+				permissionServiceImpl.updateApiRoleMuti(apiRoles));
 	}
 	
 	@ResponseBody

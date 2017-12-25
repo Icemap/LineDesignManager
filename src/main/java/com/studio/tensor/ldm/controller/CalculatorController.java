@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.AutoTowerBean;
 import com.studio.tensor.ldm.bean.AutoTowerBeanWithLength;
+import com.studio.tensor.ldm.bean.GeoCodeBean;
 import com.studio.tensor.ldm.bean.GeoCodeResultBean;
 import com.studio.tensor.ldm.bean.LatLngInfo;
 import com.studio.tensor.ldm.bean.MatStaBean;
@@ -255,5 +256,13 @@ public class CalculatorController
 		List<LatLngInfo> llil = AutoSetUtils.getAllLengthPoint(pointList, 500.0);
 		GeoCodeResultBean geoCodeResultBean = AMapPointsUtils.getPointGeoCodeThread(llil);
 		return geoCodeResultBean;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/perTowerGeoCode")
+	public GeoCodeBean perTowerAutoGeoCode(Double lon, Double lat)
+	{
+		LatLngInfo coodMer = CoodUtils.lonLatToMercator(lon, lat);
+		return AMapPointsUtils.getPointGeoCode(coodMer);
 	}
 }
