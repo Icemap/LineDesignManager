@@ -141,6 +141,41 @@ public class CalculatorController
 	}
 	
 	@ResponseBody
+	@RequestMapping("/getLineLength")
+	public Double getLineLength(String jsonCoodList)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
+					cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(covPoint.getLongitude()
+					, covPoint.getLatitude()));
+		}
+		return AutoSetUtils.getAllLength(pointList);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/autoTower/avgLength/num")
+	public Integer getAutoTowerByAvgLengthNum(
+			String jsonCoodList, Double avgLength)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
+					cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(covPoint.getLongitude()
+					, covPoint.getLatitude()));
+		}
+		return AutoSetUtils.getRealTowerNum(pointList, avgLength);
+	}
+	
+	@ResponseBody
 	@RequestMapping("/autoTower/avgLength")
 	public List<AutoTowerBeanWithLength> getAutoTowerByAvgLength(
 			String jsonCoodList, Double avgLength)
