@@ -21,6 +21,7 @@ import com.studio.tensor.ldm.digging.PolygonInfo;
 import com.studio.tensor.ldm.utils.AMapPointsUtils;
 import com.studio.tensor.ldm.utils.AnglelUtils;
 import com.studio.tensor.ldm.utils.AutoSetUtils;
+import com.studio.tensor.ldm.utils.CalcUtils;
 import com.studio.tensor.ldm.utils.CoodUtils;
 
 @Controller
@@ -299,5 +300,24 @@ public class CalculatorController
 	{
 		LatLngInfo coodMer = CoodUtils.lonLatToMercator(lon, lat);
 		return AMapPointsUtils.getPointGeoCode(coodMer);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/douglasSimplify")
+	public List<LatLngInfo> douglasSimplify(String jsonCoodList, Double level)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo lli = CoodUtils.lonLatToMercator(cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(lli.getLongitude(), lli.getLatitude()));
+		}
+		
+		CalcUtils calcUtils = new CalcUtils();
+		calcUtils.setPoint(pointList, level);
+		calcUtils.initCompress();
+		return calcUtils.getResult();
 	}
 }
