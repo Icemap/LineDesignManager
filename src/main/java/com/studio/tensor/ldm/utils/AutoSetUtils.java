@@ -101,8 +101,12 @@ public class AutoSetUtils
 		Integer bigLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, bigLength);
 		Integer smallLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, smallLength);
 		
-		while(bigLengthTowerNum != towerNum && smallLengthTowerNum != towerNum)
+		while(true)
 		{
+			if(bigLengthTowerNum.intValue() == towerNum.intValue() || 
+					smallLengthTowerNum.intValue() == towerNum.intValue())
+				break;
+			
 			if(bigLengthTowerNum > towerNum && smallLengthTowerNum > towerNum)
 			{
 				smallLength = bigLength;

@@ -26,6 +26,23 @@ public class CoodUtils
         return new LatLngInfo(toY, toX);
     }
 
+    public static LatLngInfo lonLatToGoogleMercator(double lon, double lat)
+    {
+        double toX = lon * 20037508.34D / 180.0D + 20037508.34D;
+        double toY = Math.log(Math
+                .tan((90.0D + lat) * 3.141592653589793D / 360.0D)) / 0.0174532925199433D;
+        toY = toY * 20037508.34D / 180.0D;
+        toY = 20037508.34D - toY;
+        return new LatLngInfo(toY, toX);
+    }
+    
+    public static LatLngInfo googleMercatorToMercator(double lon, double lat)
+    {
+        double toX = lon - 20037508.34D;
+        double toY = lat - 20037508.34D;
+        return new LatLngInfo(toY, toX);
+    }
+    
     public static LatLngInfo mercatorToGcj(double lon, double lat)
     {
         LatLngInfo latLngInfo = mercatorToLonLat(lon, lat);

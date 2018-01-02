@@ -23,6 +23,7 @@ import com.studio.tensor.ldm.utils.AnglelUtils;
 import com.studio.tensor.ldm.utils.AutoSetUtils;
 import com.studio.tensor.ldm.utils.CalcUtils;
 import com.studio.tensor.ldm.utils.CoodUtils;
+import com.studio.tensor.ldm.utils.LineBufferUtils;
 
 @Controller
 @RequestMapping("/calc")
@@ -173,7 +174,7 @@ public class CalculatorController
 			pointList.add(new PointBean(covPoint.getLongitude()
 					, covPoint.getLatitude()));
 		}
-		return AutoSetUtils.getRealTowerNum(pointList, avgLength);
+		return AutoSetUtils.getRealTowerNum(pointList, avgLength) + coodList.size() - 2;
 	}
 	
 	@ResponseBody
@@ -220,9 +221,10 @@ public class CalculatorController
 	public List<AutoTowerBeanWithLength> getAutoTowerByAvgLength(
 			String jsonCoodList, Integer towerNum)
 	{
-		
 		List<LatLngInfo> coodList = new Gson().fromJson(
 				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		towerNum = towerNum - coodList.size() + 2;
+		
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
@@ -319,5 +321,21 @@ public class CalculatorController
 		calcUtils.setPoint(pointList, level);
 		calcUtils.initCompress();
 		return calcUtils.getResult();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/lineBuffer")
+	public List<LatLngInfo> lineBuffer(String jsonCoodList, Double distance)
+	{
+		List<LatLngInfo> coodList = new Gson().fromJson(
+				jsonCoodList, new TypeToken<List<LatLngInfo>>(){}.getType());
+		List<PointBean> pointList = new ArrayList<>();
+		for(LatLngInfo cood : coodList)
+		{
+			LatLngInfo lli = CoodUtils.lonLatToMercator(cood.getLongitude(), cood.getLatitude());
+			pointList.add(new PointBean(lli.getLongitude(), lli.getLatitude()));
+		}
+		
+		return LineBufferUtils.getLineBuffer(pointList, distance);
 	}
 }

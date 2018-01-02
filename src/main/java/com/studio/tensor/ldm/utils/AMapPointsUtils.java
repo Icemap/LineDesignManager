@@ -183,7 +183,14 @@ public class AMapPointsUtils
 		{
 			geoCodeBean.district = "";
 		}
-		
+		try
+		{
+			geoCodeBean.township = addressComponent.get("township").getAsString();
+		}
+		catch (Exception e) 
+		{
+			geoCodeBean.township = "";
+		}
 		return geoCodeBean;
 	}
 	
