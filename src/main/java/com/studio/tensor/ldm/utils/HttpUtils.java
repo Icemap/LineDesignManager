@@ -29,34 +29,25 @@ import org.apache.commons.logging.LogFactory;
 
 public class HttpUtils
 {
-	public static BufferedImage getImage(String url)
+	public static BufferedImage getImage(String url) throws IOException 
 	{
 		BufferedImage bufImg = null;
-		try
-		{
-			URL urlObj = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
+		
+		URL urlObj = new URL(url);
+		HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
 
-			// 连接超时
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
-			conn.setConnectTimeout(25000);
+		// 连接超时
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+		conn.setConnectTimeout(3000);
 
-			// 读取超时 --服务器响应比较慢,增大时间
-			conn.setReadTimeout(25000);
-			conn.setRequestMethod("GET");
-			conn.connect();
+		// 读取超时 --服务器响应比较慢,增大时间
+		conn.setReadTimeout(3000);
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("User-Agent", "Microsoft Internet Explorer");
+		conn.connect();
 
-			bufImg = ImageIO.read(conn.getInputStream());
-		}
-		catch (MalformedURLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		bufImg = ImageIO.read(conn.getInputStream());
 		
 		return bufImg;
 	}
