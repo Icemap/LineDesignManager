@@ -9,7 +9,11 @@ public class ResultBean
 	 * 405 : Token 不合法
 	 * 406 : 非管理员身份
 	 * 407 : 该手机已经注册
+	 * 408 : 图片类型不合法
+	 * 409 : 地图类型不合法
+	 * 410 : 生成图片错误
 	 */
+	
 	private Integer code;
 	private String message;
 	private Object resultBean;
@@ -87,6 +91,30 @@ public class ResultBean
 		ResultBean result = new ResultBean();
 		result.setCode(407);
 		result.setMessage("该手机已经注册");
+		return result;
+	}
+	
+	public static ResultBean picTypeIllegal()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(408);
+		result.setMessage("图片类型不合法");
+		return result;
+	}
+	
+	public static ResultBean mapTypeIllegal()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(409);
+		result.setMessage("地图类型不合法");
+		return result;
+	}
+	
+	public static ResultBean makePicError()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(410);
+		result.setMessage("生成图片错误");
 		return result;
 	}
 	

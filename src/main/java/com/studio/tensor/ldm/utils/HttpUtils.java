@@ -39,12 +39,12 @@ public class HttpUtils
 		// 连接超时
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
-		conn.setConnectTimeout(3000);
+		conn.setConnectTimeout(25000);
 
 		// 读取超时 --服务器响应比较慢,增大时间
-		conn.setReadTimeout(3000);
+		conn.setReadTimeout(25000);
 		conn.setRequestMethod("GET");
-		conn.setRequestProperty("User-Agent", "Microsoft Internet Explorer");
+		conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36");
 		conn.connect();
 
 		bufImg = ImageIO.read(conn.getInputStream());

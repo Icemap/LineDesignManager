@@ -1,23 +1,23 @@
-package com.studio.tensor.ldm.test;
+package com.studio.tensor.ldm.utils;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
-
-import com.google.gson.Gson;
 import com.studio.tensor.ldm.bean.DrawPicBean;
+import com.studio.tensor.ldm.bean.DrawPicBean.LabelBean;
 import com.studio.tensor.ldm.bean.DrawPicBean.LocationBean;
+import com.studio.tensor.ldm.bean.DrawPicBean.PointBean;
 import com.studio.tensor.ldm.bean.DrawPicBean.PolygonBean;
 import com.studio.tensor.ldm.bean.DrawPicBean.PolylineBean;
 import com.studio.tensor.ldm.bean.LatLngInfo;
-import com.studio.tensor.ldm.utils.CoodUtils;
-import com.studio.tensor.ldm.utils.HttpUtils;
 
 public class DrawPicUtils
 {
@@ -67,17 +67,115 @@ public class DrawPicUtils
 	private static String TianDiTu_Image_Url = "http://t1.tianditu.cn/DataServer?T=vec_w&X={x}&Y={y}&L={z}";
 	private static String TianDiTu_Cover_Url = "http://t1.tianditu.cn/DataServer?T=cva_w&X={x}&Y={y}&L={z}";
 	
-	public static void onDraw(DrawPicBean drawPicBean, Integer level, BackgroundType type)
+	public static BufferedImage onDraw(DrawPicBean drawPicBean, Integer level,BackgroundType type)
 	{
 		GoogleMapDrawPrarm backgroundDrawParam = getBackgroundImageParam(drawPicBean, level);
 		BufferedImage image = drawBackgroundImage(backgroundDrawParam, type);
+		image = drawCover(drawPicBean, backgroundDrawParam, image);
+		return image;
+	}
+	
+	public static Color getColor(String colorString)
+	{
+		String[] color = colorString.split(",");
+		if(color.length == 4)
+			return new Color(Integer.parseInt(color[1]), Integer.parseInt(color[2]),
+					Integer.parseInt(color[3]), Integer.parseInt(color[0]));
+		return new Color(Integer.parseInt(color[0]), Integer.parseInt(color[1]),
+				Integer.parseInt(color[2]));
+	}
+	
+	public static BufferedImage drawCover(DrawPicBean drawPicBean, 
+			GoogleMapDrawPrarm backgroundDrawParam, BufferedImage image)
+	{
+		Integer picWidth = (backgroundDrawParam.rightBottomMapParam.x 
+				- backgroundDrawParam.leftTopMapParam.x + 1) * GOOGLE_MAP_TILE_WIDTH;
+		Integer picHeight = (backgroundDrawParam.rightBottomMapParam.y 
+				- backgroundDrawParam.leftTopMapParam.y + 1) * GOOGLE_MAP_TILE_WIDTH;
+		
+		Double trueWidth = backgroundDrawParam.rightBottomMocCood.getLongitude() - 
+				backgroundDrawParam.leftTopMocCood.getLongitude();
+		Double trueHeight = backgroundDrawParam.rightBottomMocCood.getLatitude() - 
+				backgroundDrawParam.leftTopMocCood.getLatitude();
+		
+		Graphics g = image.getGraphics();
+		Graphics2D gHandle = (Graphics2D)g;
+		BasicStroke bs = new BasicStroke(backgroundDrawParam.leftTopMapParam.z * backgroundDrawParam.leftTopMapParam.z / 24 + 1);
+		gHandle.setStroke(bs);
+		
+		for(PolygonBean polygon : drawPicBean.polygon)
+		{
+			int[] xs = new int[polygon.coor.length];
+			int[] ys = new int[polygon.coor.length];
+			for(int i = 0;i < polygon.coor.length;i++)
+			{
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polygon.coor[i].lon, polygon.coor[i].lat);
+				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
+						/ trueWidth * picWidth);
+				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
+						/ trueHeight * picHeight);
+			}
+			gHandle.setColor(getColor(polygon.color));
+			gHandle.fillPolygon(xs, ys, polygon.coor.length);
+		}
+		
+		for(PolylineBean polyline : drawPicBean.polyline)
+		{
+			int[] xs = new int[polyline.coor.length];
+			int[] ys = new int[polyline.coor.length];
+			for(int i = 0;i < polyline.coor.length;i++)
+			{
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polyline.coor[i].lon, polyline.coor[i].lat);
+				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
+						/ trueWidth * picWidth);
+				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
+						/ trueHeight * picHeight);
+			}
+			gHandle.setColor(getColor(polyline.color));
+			gHandle.drawPolyline(xs, ys, polyline.coor.length);
+		}
+		
+		for(PointBean point : drawPicBean.point)
+		{
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(point.coor.lon, point.coor.lat);
+			drawIcon(gHandle, loc, point, backgroundDrawParam, trueWidth, trueHeight, picWidth, picHeight);
+		}
+		
+		gHandle.setFont(new Font("楷体", Font.BOLD, backgroundDrawParam.leftTopMapParam.z 
+				* backgroundDrawParam.leftTopMapParam.z / 6 + 1));
+		for(LabelBean label : drawPicBean.label)
+		{
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(label.coor.lon, label.coor.lat);
+			gHandle.setColor(getColor(label.color));
+			gHandle.drawString(label.text, 
+					(int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
+							/ trueWidth * picWidth), 
+					(int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
+							/ trueHeight * picHeight));
+		}
+		gHandle.dispose();
+		
+		return image;
+	}
+	
+	public static void drawIcon(Graphics gHandle, LatLngInfo loc, PointBean point,
+			GoogleMapDrawPrarm backgroundDrawParam, Double trueWidth, Double trueHeight,
+			Integer picWidth, Integer picHeight)
+	{
+		int ICON_WIDTH = backgroundDrawParam.leftTopMapParam.z * backgroundDrawParam.leftTopMapParam.z / 4;
 		try
 		{
-			ImageIO.write(image, "png", new File("E://test.png"));
+			gHandle.drawImage(HttpUtils.getImage(point.pointIconUrl),
+					(int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
+							/ trueWidth * picWidth - ICON_WIDTH / 2), 
+					(int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
+							/ trueHeight * picHeight - ICON_WIDTH / 2), ICON_WIDTH, ICON_WIDTH, null);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
+			drawIcon(gHandle, loc, point, backgroundDrawParam, trueWidth,
+					trueHeight, picWidth, picHeight);
 		}
 	}
 	
@@ -147,9 +245,10 @@ public class DrawPicUtils
 				(backgroundDrawParam.rightBottomMapParam.x - backgroundDrawParam.leftTopMapParam.x + 1) * GOOGLE_MAP_TILE_WIDTH, 
 				(backgroundDrawParam.rightBottomMapParam.y - backgroundDrawParam.leftTopMapParam.y + 1) * GOOGLE_MAP_TILE_WIDTH,
 				BufferedImage.TYPE_INT_ARGB);
-		Graphics gHandle = panel.getGraphics();
-		
-		
+		Graphics g = panel.getGraphics();
+		Graphics2D gHandle = (Graphics2D)g;
+		BasicStroke bs = new BasicStroke(backgroundDrawParam.leftTopMapParam.z);
+		gHandle.setStroke(bs);
 		//多线程部分
 		Vector<Thread> threads = new Vector<Thread>();
 		for(int x = backgroundDrawParam.leftTopMapParam.x ;
@@ -269,50 +368,5 @@ public class DrawPicUtils
 			result.coverUrl = result.coverUrl.replace("{z}", z + "");
 		}
 		return result;
-	}
-	
-	
-	public static void main(String[] args)
-	{
-		String jsonDrawPicBean = "{\r\n" + 
-				"	\"point\":\r\n" + 
-				"	[\r\n" + 
-				"		{\r\n" + 
-				"			\"pointIconUrl\":\"https://www.baidu.com/img/bd_logo1.png\",\r\n" + 
-				"			\"coor\":\r\n" + 
-				"			{\r\n" + 
-				"				\"lon\":113.17531585693361,\r\n" + 
-				"				\"lat\":23.091417455868857\r\n" + 
-				"			}\r\n" + 
-				"		}\r\n" + 
-				"	],\r\n" + 
-				"	\"polyline\":\r\n" + 
-				"	[\r\n" + 
-				"		{\r\n" + 
-				"			\"color\":\"#FF0000\",\r\n" + 
-				"			\"coor\":\r\n" + 
-				"			[{\"lon\":113.17531585693361,\"lat\":23.091417455868857},{\"lon\":113.27041625976562,\"lat\":23.11225968329776},{\"lon\":113.39263916015626,\"lat\":23.109101977956197},{\"lon\":113.38645935058595,\"lat\":23.0253957508145},{\"lon\":113.23711395263673,\"lat\":23.018760201342253},{\"lon\":113.14682006835939,\"lat\":23.067413310425852},{\"lon\":113.15437316894533,\"lat\":23.148252272743257}]\r\n" + 
-				"		}\r\n" + 
-				"	],\r\n" + 
-				"	\"polygon\":\r\n" + 
-				"	[\r\n" + 
-				"		{\r\n" + 
-				"			\"color\":\"#88FF0000\",\r\n" + 
-				"			\"coor\":\r\n" + 
-				"			[{\"lon\":113.17531585693361,\"lat\":23.091417455868857},{\"lon\":113.27041625976562,\"lat\":23.11225968329776},{\"lon\":113.39263916015626,\"lat\":23.109101977956197},{\"lon\":113.38645935058595,\"lat\":23.0253957508145},{\"lon\":113.23711395263673,\"lat\":23.018760201342253},{\"lon\":113.14682006835939,\"lat\":23.067413310425852},{\"lon\":113.15437316894533,\"lat\":23.148252272743257}]\r\n" + 
-				"		}\r\n" + 
-				"	],\r\n" + 
-				"	\"label\":\r\n" + 
-				"	[\r\n" + 
-				"		{\r\n" + 
-				"			\"color\":\"#0000FF\",\r\n" + 
-				"			\"coor\":\r\n" + 
-				"			{\"lon\":113.17531585693361,\"lat\":23.091417455868857}\r\n" + 
-				"		}\r\n" + 
-				"	]\r\n" + 
-				"}";
-		DrawPicBean drawMsg = new Gson().fromJson(jsonDrawPicBean, DrawPicBean.class);
-		onDraw(drawMsg, 16, BackgroundType.AMap_Image);
-		System.out.print("Done!!!");
 	}
 }

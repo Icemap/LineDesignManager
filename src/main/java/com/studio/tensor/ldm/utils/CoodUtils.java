@@ -36,13 +36,6 @@ public class CoodUtils
         return new LatLngInfo(toY, toX);
     }
     
-    public static LatLngInfo googleMercatorToMercator(double lon, double lat)
-    {
-        double toX = lon - 20037508.34D;
-        double toY = lat - 20037508.34D;
-        return new LatLngInfo(toY, toX);
-    }
-    
     public static LatLngInfo mercatorToGcj(double lon, double lat)
     {
         LatLngInfo latLngInfo = mercatorToLonLat(lon, lat);
