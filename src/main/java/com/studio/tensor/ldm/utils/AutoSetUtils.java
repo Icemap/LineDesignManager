@@ -129,7 +129,7 @@ public class AutoSetUtils
 			bigLengthTowerNum = AutoSetUtils.getRealTowerNum(pointList, bigLength);
 		}
 		
-		return smallLengthTowerNum == towerNum ? smallLength : bigLength;
+		return smallLengthTowerNum.intValue() == towerNum.intValue() ? smallLength : bigLength;
 	}
 	
 	public static Double getAllLength(List<PointBean> pointList)

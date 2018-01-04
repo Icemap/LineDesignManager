@@ -75,15 +75,16 @@ public class DrawPicUtils
 		return image;
 	}
 	
-	public static Color getColor(String colorString)
-	{
-		String[] color = colorString.split(",");
-		if(color.length == 4)
-			return new Color(Integer.parseInt(color[1]), Integer.parseInt(color[2]),
-					Integer.parseInt(color[3]), Integer.parseInt(color[0]));
-		return new Color(Integer.parseInt(color[0]), Integer.parseInt(color[1]),
-				Integer.parseInt(color[2]));
-	}
+	 public static Color toColorFromString(String colorStr)
+	 {  
+		colorStr = colorStr.substring(1);
+		Integer a = Integer.parseInt(colorStr.substring(0, 2), 16);
+		Integer r = Integer.parseInt(colorStr.substring(2, 4), 16);
+		Integer g = Integer.parseInt(colorStr.substring(4, 6), 16);
+		Integer b = Integer.parseInt(colorStr.substring(6, 8), 16);
+		Color color =  new Color(r, g, b, a) ;  
+		return color;
+	 }  
 	
 	public static BufferedImage drawCover(DrawPicBean drawPicBean, 
 			GoogleMapDrawPrarm backgroundDrawParam, BufferedImage image)
@@ -115,7 +116,7 @@ public class DrawPicUtils
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
 						/ trueHeight * picHeight);
 			}
-			gHandle.setColor(getColor(polygon.color));
+			gHandle.setColor(toColorFromString(polygon.color));
 			gHandle.fillPolygon(xs, ys, polygon.coor.length);
 		}
 		
@@ -131,7 +132,7 @@ public class DrawPicUtils
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
 						/ trueHeight * picHeight);
 			}
-			gHandle.setColor(getColor(polyline.color));
+			gHandle.setColor(toColorFromString(polyline.color));
 			gHandle.drawPolyline(xs, ys, polyline.coor.length);
 		}
 		
@@ -146,7 +147,7 @@ public class DrawPicUtils
 		for(LabelBean label : drawPicBean.label)
 		{
 			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(label.coor.lon, label.coor.lat);
-			gHandle.setColor(getColor(label.color));
+			gHandle.setColor(toColorFromString(label.color));
 			gHandle.drawString(label.text, 
 					(int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
 							/ trueWidth * picWidth), 
@@ -244,7 +245,7 @@ public class DrawPicUtils
 		BufferedImage panel = new BufferedImage(
 				(backgroundDrawParam.rightBottomMapParam.x - backgroundDrawParam.leftTopMapParam.x + 1) * GOOGLE_MAP_TILE_WIDTH, 
 				(backgroundDrawParam.rightBottomMapParam.y - backgroundDrawParam.leftTopMapParam.y + 1) * GOOGLE_MAP_TILE_WIDTH,
-				BufferedImage.TYPE_INT_ARGB);
+				BufferedImage.TYPE_INT_RGB);
 		Graphics g = panel.getGraphics();
 		Graphics2D gHandle = (Graphics2D)g;
 		BasicStroke bs = new BasicStroke(backgroundDrawParam.leftTopMapParam.z);
