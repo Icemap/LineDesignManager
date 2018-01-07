@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.studio.tensor.ldm.bean.ResultBean;
+import com.studio.tensor.ldm.pojo.UserStatus;
 import com.studio.tensor.ldm.service.impl.UserInfoServiceImpl;
 
 @Controller
@@ -107,5 +108,22 @@ public class UserController
 	public ResultBean adminDeleteUser(Integer userId)
 	{
 		return ResultBean.tokenKeyValid(userInfoServiceImpl.userDelete(userId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/userStatusSet")
+	public ResultBean userStatusSet(Integer userId, String statusJson)
+	{
+		UserStatus userStatus = new UserStatus();
+		userStatus.setUserId(userId);
+		userStatus.setStatusJson(statusJson);
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.userStatusSet(userStatus));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/userStatusGet")
+	public ResultBean userStatusGet(Integer userId)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.userStatusGet(userId));
 	}
 }

@@ -11,7 +11,9 @@ import com.studio.tensor.ldm.bean.FileSetting;
 import com.studio.tensor.ldm.bean.LoginResult;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.dao.UserInfoMapper;
+import com.studio.tensor.ldm.dao.UserStatusMapper;
 import com.studio.tensor.ldm.pojo.UserInfo;
+import com.studio.tensor.ldm.pojo.UserStatus;
 import com.studio.tensor.ldm.service.UserInfoService;
 import com.studio.tensor.ldm.utils.FileUtils;
 import com.studio.tensor.ldm.utils.HashUtils;
@@ -30,6 +32,9 @@ public class UserInfoServiceImpl implements UserInfoService
 	
 	@Autowired
 	SmsServiceImpl smsServiceImpl;
+	
+	@Autowired
+	UserStatusMapper userStatusMapper;
 	
 	@Override
 	public ResultBean userLogin(String phoneNum, String password)
@@ -148,5 +153,22 @@ public class UserInfoServiceImpl implements UserInfoService
 		userInfo.setPassword(HashUtils.getMD5(password));
 		userInfo.setRoleId(roleId);
 		return userInfoMapper.insertSelective(userInfo) == 1;
+	}
+
+	@Override
+	public Boolean userStatusSet(UserStatus userStatus)
+	{
+		Boolean result;
+		if(userStatusMapper.selectUserIdNum(userStatus.getUserId()) == 1)
+			result = userStatusMapper.updateByUserId(userStatus.getUserId(), userStatus.getStatusJson()) == 1;
+		else
+			result = userStatusMapper.insertSelective(userStatus) == 1;
+		return result;
+	}
+
+	@Override
+	public UserStatus userStatusGet(Integer userId)
+	{
+		return userStatusMapper.selectUserStatus(userId);
 	}
 }

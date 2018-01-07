@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.pojo.UserInfo;
+import com.studio.tensor.ldm.pojo.UserStatus;
 
 public interface UserInfoService
 {
@@ -23,4 +24,7 @@ public interface UserInfoService
 	Integer getUserNumber();
 	Boolean userDelete(Integer userId);
 	Boolean userInsert(String phoneNum, String password, Integer roleId);
+	
+	Boolean userStatusSet(UserStatus userStatus);
+	UserStatus userStatusGet(Integer userId);
 }
