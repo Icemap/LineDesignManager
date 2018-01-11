@@ -43,6 +43,9 @@ public class PermissionFilter implements Filter
 		HttpServletRequest hreq = (HttpServletRequest) req;
 		String path = hreq.getServletPath();
 		String token = hreq.getParameter("token");
+		String slineLength = hreq.getParameter("lineLength");
+		Integer lineLength = (slineLength == null || slineLength.equals("")) ? 
+				0 : Integer.parseInt(slineLength);
 		
 		//黑名单模式，无记录的直接通过
 		if(!permissionServiceImpl.isApiExist(path))
@@ -56,7 +59,7 @@ public class PermissionFilter implements Filter
 		//得到用户的RoleId
 		if(path.equals("/user/loginBackground"))
 		{
-			ResultBean adminBean = userInfoServiceImpl.userLogin(
+			ResultBean adminBean = userInfoServiceImpl.userLoginBackground(
 					hreq.getParameter("adminAccount"), 
 					hreq.getParameter("adminPassword"));
 			if(adminBean.getCode().equals(200))
@@ -65,11 +68,15 @@ public class PermissionFilter implements Filter
 			
 		if(token != null)
 		{
-			String sRoleId = redisServiceImpl.getUserRoleId(token);
-			if(sRoleId != null && !sRoleId.equals(""))
+			String sUserRoleId = redisServiceImpl.getUserRoleId(token);
+			String sRole = sUserRoleId.split(",")[0];
+			String sUser = sUserRoleId.split(",")[1];
+			if(sRole != null && !sRole.equals(""))
 			{
-				Integer userRoleId = Integer.parseInt(sRoleId);
-				if(permissionServiceImpl.isRoleAllowThisApi(path, userRoleId))
+				Integer userRoleId = Integer.parseInt(sRole);
+				Integer userId = Integer.parseInt(sUser);
+				if(permissionServiceImpl.isRoleAllowThisApi(path, userRoleId,
+						lineLength, userId))
 				{
 					redisServiceImpl.refreshToken(token);
 					chain.doFilter(req, res);

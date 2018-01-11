@@ -2,7 +2,7 @@ package com.studio.tensor.ldm.service;
 
 public interface RedisService
 {
-	void setToken(String token, Integer userRoleId);
+	void setToken(String token, String userRoleId);
 	void refreshToken(String token);
 	String getUserRoleId(String token);
 	

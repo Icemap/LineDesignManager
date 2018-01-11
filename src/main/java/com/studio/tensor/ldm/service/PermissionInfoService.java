@@ -5,33 +5,35 @@ import java.util.List;
 import com.studio.tensor.ldm.bean.PermissionNode;
 import com.studio.tensor.ldm.pojo.ApiInfo;
 import com.studio.tensor.ldm.pojo.ApiRole;
+import com.studio.tensor.ldm.pojo.OrderInfo;
 import com.studio.tensor.ldm.pojo.RoleInfo;
 
 public interface PermissionInfoService
 {
-	//Role
-	Boolean insertRole(String roleName, String des,
-			Long price, Boolean userVisible);
-	Boolean deleteRole(Integer roleId);
-	Boolean updateRole(RoleInfo roleInfo);
-	
 	//API
-	Boolean insertAPI(String apiName, String url);
-	Boolean deleteAPI(Integer apiId);
-	Boolean updateAPI(ApiInfo apiInfo);
-	List<ApiInfo> getAPIList();
+	Boolean insertApi(ApiInfo apiInfo);
+	Boolean updateApi(ApiInfo apiInfo);
+	Boolean deleteApi(Integer apiInfoId);
+	List<ApiInfo> selectAllApi();
+	
+	//Role
+	Boolean insertRole(RoleInfo roleInfo);
+	Boolean updateRole(RoleInfo roleInfo);
+	Boolean deleteRole(Integer roleInfoId);
+	List<RoleInfo> selectAllRole();
 	
 	//API-Role
-	Boolean insertApiRole(Integer apiId, Integer roleId);
-	Boolean deleteApiRole(Integer apiRoleId);
-	Boolean updateApiRole(ApiRole apiRole);
+	Boolean insertRoleApis(List<ApiRole> apiRoleInfos);
+	Boolean deleteRoleApis(List<Integer> apiRoleInfoIds);
+	
+	//Order
+	Boolean insertOrder(OrderInfo orderInfo);
+	Boolean deleteOrder(Integer orderInfoId);
+	Boolean isExpired(Integer userId);
+	List<OrderInfo> selectOrderInfo(Integer start, Integer size);
+	Integer selectOrderInfoNum();
 	
 	//Tree
 	List<PermissionNode> getAllNode();
-	List<PermissionNode> getAllUserVisableNode();
-	
-	//Muti
-	Boolean insertApiRoleMuti(List<ApiRole> apiRoles);
-	Boolean deleteApiRoleMuti(List<Integer> apiRoleIds);
-	Boolean updateApiRoleMuti(List<ApiRole> apiRoles);
+	List<ApiInfo> getApiList();
 }

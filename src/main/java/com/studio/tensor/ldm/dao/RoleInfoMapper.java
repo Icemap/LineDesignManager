@@ -18,4 +18,6 @@ public interface RoleInfoMapper {
     int updateByPrimaryKey(RoleInfo record);
     
     List<RoleInfo> selectAll();
+    
+    RoleInfo selectDefaultRole();
 }

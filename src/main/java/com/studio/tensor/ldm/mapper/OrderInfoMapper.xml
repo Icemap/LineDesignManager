@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studio.tensor.ldm.dao.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.studio.tensor.ldm.pojo.OrderInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_user_id" jdbcType="INTEGER" property="orderUserId" />
+    <result column="order_role_id" jdbcType="INTEGER" property="orderRoleId" />
+    <result column="order_start_time" jdbcType="TIMESTAMP" property="orderStartTime" />
+    <result column="order_end_time" jdbcType="TIMESTAMP" property="orderEndTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_user_id, order_role_id, order_start_time, order_end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where order_user_id = #{userId,jdbcType=INTEGER}
+    order by order_start_time desc
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    limit #{start},#{size}
+  </select>
+  
+  <select id="selectNum" resultType="java.lang.Integer">
+    select count(*) from order_info
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.OrderInfo">
+    insert into order_info (id, order_user_id, order_role_id, 
+      order_start_time, order_end_time)
+    values (#{id,jdbcType=INTEGER}, #{orderUserId,jdbcType=INTEGER}, #{orderRoleId,jdbcType=INTEGER}, 
+      #{orderStartTime,jdbcType=TIMESTAMP}, #{orderEndTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.OrderInfo">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderUserId != null">
+        order_user_id,
+      </if>
+      <if test="orderRoleId != null">
+        order_role_id,
+      </if>
+      <if test="orderStartTime != null">
+        order_start_time,
+      </if>
+      <if test="orderEndTime != null">
+        order_end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderUserId != null">
+        #{orderUserId,jdbcType=INTEGER},
+      </if>
+      <if test="orderRoleId != null">
+        #{orderRoleId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStartTime != null">
+        #{orderStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderEndTime != null">
+        #{orderEndTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.studio.tensor.ldm.pojo.OrderInfo">
+    update order_info
+    <set>
+      <if test="orderUserId != null">
+        order_user_id = #{orderUserId,jdbcType=INTEGER},
+      </if>
+      <if test="orderRoleId != null">
+        order_role_id = #{orderRoleId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStartTime != null">
+        order_start_time = #{orderStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderEndTime != null">
+        order_end_time = #{orderEndTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.studio.tensor.ldm.pojo.OrderInfo">
+    update order_info
+    set order_user_id = #{orderUserId,jdbcType=INTEGER},
+      order_role_id = #{orderRoleId,jdbcType=INTEGER},
+      order_start_time = #{orderStartTime,jdbcType=TIMESTAMP},
+      order_end_time = #{orderEndTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

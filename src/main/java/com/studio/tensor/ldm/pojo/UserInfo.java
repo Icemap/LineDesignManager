@@ -16,6 +16,8 @@ public class UserInfo {
 
     private String iconUrl;
 
+    private Integer apiNum;
+    
     public Integer getId() {
         return id;
     }
@@ -63,4 +65,14 @@ public class UserInfo {
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl == null ? null : iconUrl.trim();
     }
+
+	public Integer getApiNum()
+	{
+		return apiNum;
+	}
+
+	public void setApiNum(Integer apiNum)
+	{
+		this.apiNum = apiNum;
+	}
 }

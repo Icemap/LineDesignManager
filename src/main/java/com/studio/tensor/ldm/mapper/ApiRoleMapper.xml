@@ -22,6 +22,13 @@
     from api_role
   </select>
   
+  <select id="selectNumByApiAndRoleId" resultType="java.lang.Integer">
+    select count(*)
+    from api_role
+    where api_id = #{apiId,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from api_role
     where id = #{id,jdbcType=INTEGER}

@@ -27,4 +27,6 @@ public interface UserInfoService
 	
 	Boolean userStatusSet(UserStatus userStatus);
 	UserStatus userStatusGet(Integer userId);
+	
+	Boolean userApiNumPlus(Integer UserId);
 }

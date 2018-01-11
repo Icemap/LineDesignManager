@@ -10,8 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.studio.tensor.ldm.bean.FileSetting;
 import com.studio.tensor.ldm.bean.LoginResult;
 import com.studio.tensor.ldm.bean.ResultBean;
+import com.studio.tensor.ldm.dao.OrderInfoMapper;
+import com.studio.tensor.ldm.dao.RoleInfoMapper;
 import com.studio.tensor.ldm.dao.UserInfoMapper;
 import com.studio.tensor.ldm.dao.UserStatusMapper;
+import com.studio.tensor.ldm.pojo.OrderInfo;
+import com.studio.tensor.ldm.pojo.RoleInfo;
 import com.studio.tensor.ldm.pojo.UserInfo;
 import com.studio.tensor.ldm.pojo.UserStatus;
 import com.studio.tensor.ldm.service.UserInfoService;
@@ -25,6 +29,9 @@ public class UserInfoServiceImpl implements UserInfoService
 	UserInfoMapper userInfoMapper;
 
 	@Autowired
+	OrderInfoMapper orderInfoMapper;
+	
+	@Autowired
 	FileSetting fileSetting;
 	
 	@Autowired
@@ -36,17 +43,48 @@ public class UserInfoServiceImpl implements UserInfoService
 	@Autowired
 	UserStatusMapper userStatusMapper;
 	
+	@Autowired
+	RoleInfoMapper roleInfoMapper;
+	
 	@Override
 	public ResultBean userLogin(String phoneNum, String password)
 	{
 		UserInfo userInfo = userInfoMapper.userLogin(
 				phoneNum, HashUtils.getMD5(password));
+		RoleInfo roleinfo = roleInfoMapper.selectDefaultRole();
+
+		if(userInfo == null)
+			return ResultBean.tokenKeyNotValid();
+		
+		if(!userInfo.getRoleId().equals(roleinfo.getId()) && isExpired(userInfo.getId()))
+		{
+			userInfo.setRoleId(roleinfo.getId());
+			userInfoMapper.updateByPrimaryKeySelective(userInfo);
+		}
+		
 		String token = HashUtils.getMD5(phoneNum + new Date().toString());
-		Integer roleId = userInfo.getRoleId();
-		if(roleId == null)
-			redisServiceImpl.setToken(token, null);
+		if(userInfo.getRoleId() == null)
+			redisServiceImpl.setToken(token, "," + userInfo.getId());
 		else
-			redisServiceImpl.setToken(token, roleId);
+			redisServiceImpl.setToken(token, userInfo.getRoleId() + "," + userInfo.getId());
+		LoginResult loginResult = new LoginResult();
+		loginResult.setToken(token);
+		loginResult.setUserInfo(userInfo);
+		
+		return ResultBean.tokenKeyValid(loginResult);
+	}
+	
+	public ResultBean userLoginBackground(String phoneNum, String password)
+	{
+		UserInfo userInfo = userInfoMapper.userLogin(
+				phoneNum, HashUtils.getMD5(password));
+		String token = HashUtils.getMD5(phoneNum + new Date().toString());
+		if(userInfo == null)
+			return ResultBean.tokenKeyNotValid();
+		else if(userInfo.getRoleId() == null)
+			redisServiceImpl.setToken(token, "," + userInfo.getId());
+		else
+			redisServiceImpl.setToken(token, userInfo.getRoleId() + "," + userInfo.getId());
 		LoginResult loginResult = new LoginResult();
 		loginResult.setToken(token);
 		loginResult.setUserInfo(userInfo);
@@ -74,6 +112,8 @@ public class UserInfoServiceImpl implements UserInfoService
 		userInfo.setPhoneNumber(phoneNum);
 		userInfo.setPassword(HashUtils.getMD5(password));
 		userInfo.setRoleId(0);
+		userInfo.setApiNum(0);
+		
 		return ResultBean.tokenKeyValid(
 				userInfoMapper.insertSelective(userInfo) == 1);
 	}
@@ -170,5 +210,32 @@ public class UserInfoServiceImpl implements UserInfoService
 	public UserStatus userStatusGet(Integer userId)
 	{
 		return userStatusMapper.selectUserStatus(userId);
+	}
+
+	@Override
+	public Boolean userApiNumPlus(Integer userId)
+	{
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+		userInfo.setApiNum((userInfo.getApiNum() == null ? 
+				0 : userInfo.getApiNum()) + 1);
+		return userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1;
+	}
+	
+	public Integer getUserApiNum(Integer userId)
+	{
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+		return userInfo.getApiNum() == null ? 0 : userInfo.getApiNum();
+	}
+	
+	public Boolean isExpired(Integer userId)
+	{
+		OrderInfo orderInfo = orderInfoMapper.selectByUserId(userId);
+		if(orderInfo == null)
+			return true;
+		
+		if(orderInfo.getOrderEndTime().getTime() < new Date().getTime())
+			return true;
+		else
+			return false;
 	}
 }

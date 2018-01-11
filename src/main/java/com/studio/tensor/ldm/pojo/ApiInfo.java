@@ -7,7 +7,9 @@ public class ApiInfo {
 
     private String url;
 
-    private String hold;
+    private Byte isCalcLength;
+
+    private Byte isCalcNum;
 
     public Integer getId() {
         return id;
@@ -33,11 +35,19 @@ public class ApiInfo {
         this.url = url == null ? null : url.trim();
     }
 
-    public String getHold() {
-        return hold;
+    public Byte getIsCalcLength() {
+        return isCalcLength;
     }
 
-    public void setHold(String hold) {
-        this.hold = hold == null ? null : hold.trim();
+    public void setIsCalcLength(Byte isCalcLength) {
+        this.isCalcLength = isCalcLength;
+    }
+
+    public Byte getIsCalcNum() {
+        return isCalcNum;
+    }
+
+    public void setIsCalcNum(Byte isCalcNum) {
+        this.isCalcNum = isCalcNum;
     }
 }

@@ -5,10 +5,11 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="api_name" jdbcType="VARCHAR" property="apiName" />
     <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="hold" jdbcType="VARCHAR" property="hold" />
+    <result column="is_calc_length" jdbcType="TINYINT" property="isCalcLength" />
+    <result column="is_calc_num" jdbcType="TINYINT" property="isCalcNum" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, api_name, url, hold
+    id, api_name, url, is_calc_length, is_calc_num
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -29,9 +30,9 @@
   </delete>
   <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.ApiInfo">
     insert into api_info (id, api_name, url, 
-      hold)
+      is_calc_length, is_calc_num)
     values (#{id,jdbcType=INTEGER}, #{apiName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
-      #{hold,jdbcType=VARCHAR})
+      #{isCalcLength,jdbcType=TINYINT}, #{isCalcNum,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.ApiInfo">
     insert into api_info
@@ -45,8 +46,11 @@
       <if test="url != null">
         url,
       </if>
-      <if test="hold != null">
-        hold,
+      <if test="isCalcLength != null">
+        is_calc_length,
+      </if>
+      <if test="isCalcNum != null">
+        is_calc_num,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -59,8 +63,11 @@
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
       </if>
-      <if test="hold != null">
-        #{hold,jdbcType=VARCHAR},
+      <if test="isCalcLength != null">
+        #{isCalcLength,jdbcType=TINYINT},
+      </if>
+      <if test="isCalcNum != null">
+        #{isCalcNum,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -73,8 +80,11 @@
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
       </if>
-      <if test="hold != null">
-        hold = #{hold,jdbcType=VARCHAR},
+      <if test="isCalcLength != null">
+        is_calc_length = #{isCalcLength,jdbcType=TINYINT},
+      </if>
+      <if test="isCalcNum != null">
+        is_calc_num = #{isCalcNum,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -83,7 +93,8 @@
     update api_info
     set api_name = #{apiName,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
-      hold = #{hold,jdbcType=VARCHAR}
+      is_calc_length = #{isCalcLength,jdbcType=TINYINT},
+      is_calc_num = #{isCalcNum,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

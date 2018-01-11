@@ -72,7 +72,7 @@ public class UserController
 	@RequestMapping("/loginBackground")
 	public ResultBean loginBackground(String adminAccount, String adminPassword)
 	{
-		return userInfoServiceImpl.userLogin(adminAccount, adminPassword);
+		return userInfoServiceImpl.userLoginBackground(adminAccount, adminPassword);
 	}
 	
 	@ResponseBody
