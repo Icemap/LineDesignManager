@@ -33,6 +33,16 @@
     delete from api_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  
+  <delete id="deleteByApiId" parameterType="java.lang.Integer">
+    delete from api_role
+    where api_id = #{apiId,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Integer">
+    delete from api_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.studio.tensor.ldm.pojo.ApiRole">
     insert into api_role (id, role_id, api_id
       )

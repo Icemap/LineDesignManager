@@ -23,4 +23,7 @@ public interface ApiRoleMapper {
     
     Integer selectNumByApiAndRoleId(@Param("apiId")Integer apiId, 
     		@Param("roleId")Integer roleId);
+    
+    Integer deleteByApiId(Integer apiId);
+    Integer deleteByRoleId(Integer roleId);
 }

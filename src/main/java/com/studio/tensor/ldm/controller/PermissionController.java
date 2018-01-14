@@ -41,7 +41,7 @@ public class PermissionController
 	@RequestMapping("/insertRole")
 	public ResultBean insertRole(String roleName, String des,
 			Long price1, Long price2, Long price3, Long price5, 
-			Boolean userVisible, Boolean isDefaultRole)
+			Boolean userVisible, Boolean isDefaultRole, Double maxLength, Integer maxNum)
 	{
 		RoleInfo roleInfo = new RoleInfo();
 		roleInfo.setDes(des);
@@ -51,6 +51,9 @@ public class PermissionController
 		roleInfo.setPrice3(price3);
 		roleInfo.setPrice5(price5);
 		roleInfo.setIsDefaultRole(new Gson().toJson(isDefaultRole));
+		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
+		roleInfo.setLength(maxLength);
+		roleInfo.setNum(maxNum);
 		
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.insertRole(roleInfo));
@@ -60,6 +63,7 @@ public class PermissionController
 	@RequestMapping("/deleteRole")
 	public ResultBean deleteRole(Integer roleId)
 	{
+		permissionServiceImpl.deleteApiRoleByRoleId(roleId);
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.deleteRole(roleId));
 	}
@@ -68,7 +72,7 @@ public class PermissionController
 	@RequestMapping("/updateRole")
 	public ResultBean updateRole(Integer roleId, String roleName, String des,
 			Long price1, Long price2, Long price3, Long price5, 
-			Boolean userVisible, Boolean isDefaultRole)
+			Boolean userVisible, Boolean isDefaultRole, Double maxLength, Integer maxNum)
 	{
 		RoleInfo roleInfo = new RoleInfo();
 		roleInfo.setId(roleId);
@@ -80,6 +84,8 @@ public class PermissionController
 		roleInfo.setPrice5(price5);
 		roleInfo.setIsDefaultRole(new Gson().toJson(isDefaultRole));
 		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
+		roleInfo.setLength(maxLength);
+		roleInfo.setNum(maxNum);
 		
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.updateRole(roleInfo));
@@ -103,6 +109,7 @@ public class PermissionController
 	@RequestMapping("/deleteAPI")
 	public ResultBean deleteAPI(Integer apiId)
 	{
+		permissionServiceImpl.deleteApiRoleByApiId(apiId);
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.deleteApi(apiId));
 	}
@@ -148,6 +155,7 @@ public class PermissionController
 		return ResultBean.tokenKeyValid(permissionServiceImpl.getApiList());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping("/buyForRole")
 	public ResultBean buyForRole(Integer userId, Integer roleId, Integer years)

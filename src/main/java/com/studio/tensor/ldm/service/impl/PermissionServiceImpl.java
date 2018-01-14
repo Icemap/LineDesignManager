@@ -209,6 +209,8 @@ public class PermissionServiceImpl implements PermissionInfoService
 		{
 			Integer apiListIndex = apiIdMap.get(apiRole.getApiId());
 			Integer roleListIndex = roleIdMap.get(apiRole.getRoleId());
+			if(apiListIndex == null || roleListIndex == null)
+				continue;
 			permissionNodeList
 				.get(roleListIndex)
 				.allowList.add(apiList.get(apiListIndex));
@@ -249,5 +251,15 @@ public class PermissionServiceImpl implements PermissionInfoService
 			}
 		}
 		return false;
+	}
+	
+	public Boolean deleteApiRoleByApiId(Integer apiId)
+	{
+		return apiRoleMapper.deleteByApiId(apiId) != 0;
+	}
+	
+	public Boolean deleteApiRoleByRoleId(Integer roleId)
+	{
+		return apiRoleMapper.deleteByRoleId(roleId) != 0;
 	}
 }
