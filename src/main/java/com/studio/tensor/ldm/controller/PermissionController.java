@@ -50,7 +50,7 @@ public class PermissionController
 		roleInfo.setPrice2(price2);
 		roleInfo.setPrice3(price3);
 		roleInfo.setPrice5(price5);
-		roleInfo.setIsDefaultRole(new Gson().toJson(isDefaultRole));
+		roleInfo.setIsDefaultRole(ByteBooleanUtils.boolean2Byte(isDefaultRole));
 		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
 		roleInfo.setLength(maxLength);
 		roleInfo.setNum(maxNum);
@@ -82,7 +82,7 @@ public class PermissionController
 		roleInfo.setPrice2(price2);
 		roleInfo.setPrice3(price3);
 		roleInfo.setPrice5(price5);
-		roleInfo.setIsDefaultRole(new Gson().toJson(isDefaultRole));
+		roleInfo.setIsDefaultRole(ByteBooleanUtils.boolean2Byte(isDefaultRole));
 		roleInfo.setUserVisible(ByteBooleanUtils.boolean2Byte(userVisible));
 		roleInfo.setLength(maxLength);
 		roleInfo.setNum(maxNum);

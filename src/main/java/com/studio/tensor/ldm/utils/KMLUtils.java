@@ -25,7 +25,7 @@ import com.studio.tensor.ldm.bean.LatLngInfo;
 public class KMLUtils
 {
 	public static void writeKML(String drawKMLBeanJson,
-			String docName, String filePath)
+			String docName, String filePath, String customerData)
 	{
 		DrawKMLBean dpb = new Gson().fromJson(drawKMLBeanJson, DrawKMLBean.class);
 		dpb = readAlt(dpb);
@@ -39,6 +39,7 @@ public class KMLUtils
 		Element rootDoc = kmlRoot.addElement("Document");
 		rootDoc.addElement("name").setText(docName);
 		rootDoc.addElement("open").setText("1");
+		if(!customerData.equals("")) rootDoc.addElement("customerData").setText(customerData);
 		
 		for(PolygonBean polygon : dpb.polygon)
 		{
@@ -118,12 +119,12 @@ public class KMLUtils
 		try 
 		{  
 		    Writer fileWriter=new FileWriter(filePath);  
-		     OutputFormat format = OutputFormat.createPrettyPrint();
-		     format.setEncoding("UTF-8");
-		     XMLWriter xmlWriter=new XMLWriter(fileWriter,format);  
-		
-		     xmlWriter.write(document);  
-		     xmlWriter.close();   
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			format.setEncoding("UTF-8");
+			XMLWriter xmlWriter=new XMLWriter(fileWriter,format);  
+			
+			xmlWriter.write(document);  
+			xmlWriter.close();   
 		} 
 		catch (IOException e) 
 		{  
@@ -172,7 +173,9 @@ public class KMLUtils
 		List<Double[][]> locReqList = getAllLoc(srcKMLBean);
 		
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("linesJson", new Gson().toJson(locReqList));
+		String linesJson = new Gson().toJson(locReqList);
+		System.out.println(linesJson);
+		params.put("linesJson", linesJson);
 		params.put("f", "json");
 		
 		String respJson = HttpUtils.URLGet("http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/calcSlope"

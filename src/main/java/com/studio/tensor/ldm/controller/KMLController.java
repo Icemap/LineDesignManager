@@ -18,10 +18,12 @@ public class KMLController
 	
 	@ResponseBody
 	@RequestMapping("/write")
-	public ResultBean writeKML(String drawKMLBeanJson, String docName)
+	public ResultBean writeKML(String drawKMLBeanJson, String docName, String customerData)
 	{
+		if(customerData == null) customerData = "";
+		
 		String fileName = docName + ".kml";
-		KMLUtils.writeKML(drawKMLBeanJson, docName, fileSetting.getSaveFilePath() + fileName);
+		KMLUtils.writeKML(drawKMLBeanJson, docName, fileSetting.getSaveFilePath() + fileName, customerData);
 		return ResultBean.tokenKeyValid(fileSetting.getGetFilePath() + fileName);
 	}
 }

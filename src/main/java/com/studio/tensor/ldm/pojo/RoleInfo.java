@@ -17,7 +17,7 @@ public class RoleInfo {
 
     private Byte userVisible;
 
-    private String isDefaultRole;
+    private Byte isDefaultRole;
 
     private Double length;
 
@@ -87,12 +87,12 @@ public class RoleInfo {
         this.userVisible = userVisible;
     }
 
-    public String getIsDefaultRole() {
+    public Byte getIsDefaultRole() {
         return isDefaultRole;
     }
 
-    public void setIsDefaultRole(String isDefaultRole) {
-        this.isDefaultRole = isDefaultRole == null ? null : isDefaultRole.trim();
+    public void setIsDefaultRole(Byte isDefaultRole) {
+        this.isDefaultRole = isDefaultRole;
     }
 
     public Double getLength() {

@@ -143,9 +143,9 @@ public class HttpUtils
 	  
 	    private static MultiThreadedHttpConnectionManager connectionManager = null;  
 	  
-	    private static int connectionTimeOut = 25000;  
+	    private static int connectionTimeOut = 60000;  
 	  
-	    private static int socketTimeOut = 25000;  
+	    private static int socketTimeOut = 60000;  
 	  
 	    private static int maxConnectionPerHost = 20;  
 	  
