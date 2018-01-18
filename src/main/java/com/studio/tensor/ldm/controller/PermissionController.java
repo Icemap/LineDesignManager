@@ -131,10 +131,10 @@ public class PermissionController
 	
 	@ResponseBody
 	@RequestMapping("/insertApiRole/muti")
-	public ResultBean insertApiRoleMuti(String jsonApiRoles)
+	public ResultBean insertApiRoleMuti(String jsonApiRoleIds)
 	{
 		List<ApiRole> apiRoles = new Gson().fromJson(
-				jsonApiRoles, new TypeToken<List<ApiRole>>() {}.getType());
+				jsonApiRoleIds, new TypeToken<List<ApiRole>>() {}.getType());
 		return ResultBean.tokenKeyValid(
 				permissionServiceImpl.insertRoleApis(apiRoles));
 	}

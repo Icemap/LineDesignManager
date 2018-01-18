@@ -246,6 +246,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 							userInfoServiceImpl.userApiNumPlus(userId);
 							return true;
 						}
+						return true;
 					}
 				}
 			}

@@ -168,9 +168,9 @@ public class FileUtils
 			try
 			{
 				if(os != null)
-				os.close();
+					os.close();
 				if(inputStream != null)
-				inputStream.close();
+					inputStream.close();
 			} 
 			catch (IOException e)
 			{

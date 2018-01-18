@@ -81,7 +81,7 @@ public class ResultBean
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(401);
-		result.setMessage("用户权限不足");
+		result.setMessage("Permission Denied");
 		return result;
 	}
 	
