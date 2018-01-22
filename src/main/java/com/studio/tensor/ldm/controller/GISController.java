@@ -30,6 +30,8 @@ public class GISController
 		params.put("value", value);
 		params.put("f", f);
 		
+	    response.setCharacterEncoding("UTF-8");  
+	    response.setContentType("text/html; charset=UTF-8");  
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/getZTSJ",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
@@ -45,7 +47,10 @@ public class GISController
 		params.put("province", province);
 		params.put("yearlevel", yearlevel);
 		params.put("f", f);
+
 		
+	    response.setCharacterEncoding("UTF-8");  
+	    response.setContentType("text/html; charset=UTF-8");  
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/ztsj/MapServer/exts/ztsj/getZTSJ",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
@@ -59,7 +64,10 @@ public class GISController
 		Map<String, String> params = new HashMap<>();
 		params.put("lineJson", lineJson);
 		params.put("f", f);
+
 		
+	    response.setCharacterEncoding("UTF-8");  
+	    response.setContentType("text/html; charset=UTF-8");  
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/getSection",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
@@ -73,7 +81,10 @@ public class GISController
 		Map<String, String> params = new HashMap<>();
 		params.put("lineJson", lineJson);
 		params.put("f", f);
+
 		
+	    response.setCharacterEncoding("UTF-8");  
+	    response.setContentType("text/html; charset=UTF-8");  
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/getAverageSlope",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
@@ -89,7 +100,10 @@ public class GISController
 		params.put("lineJson", lineJson);
 		params.put("yearlevel", yearlevel);
 		params.put("f", f);
+
 		
+	    response.setCharacterEncoding("UTF-8");  
+	    response.setContentType("text/html; charset=UTF-8");  
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/ztsj/MapServer/exts/ztsj/ztsjOverlay",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
@@ -103,7 +117,10 @@ public class GISController
 		Map<String, String> params = new HashMap<>();
 		params.put("lineJson", lineJson);
 		params.put("f", f);
+
 		
+	    response.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(LongWaitHttpUtils.URLGet(
 				"http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/calcSlope",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));

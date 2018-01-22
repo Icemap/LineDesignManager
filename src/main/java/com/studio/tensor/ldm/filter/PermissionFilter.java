@@ -86,6 +86,8 @@ public class PermissionFilter implements Filter
 		}
 
 		HttpServletResponse response = (HttpServletResponse) res;
+	    response.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
         response.getWriter().write(new Gson().toJson(ResultBean.permissionDenied()));
 	}
 

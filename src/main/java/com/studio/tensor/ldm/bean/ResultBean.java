@@ -81,11 +81,10 @@ public class ResultBean
 	{
 		ResultBean result = new ResultBean();
 		result.setCode(401);
-		result.setMessage("Permission Denied");
+		result.setMessage("用户权限不足");
 		return result;
 	}
 	
-
 	public static ResultBean phoneNumExist()
 	{
 		ResultBean result = new ResultBean();
