@@ -225,7 +225,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 		return false;
 	}
 	
-	public Boolean isRoleAllowThisApi(String url, Integer roleId, Integer lineLength,
+	public Boolean isRoleAllowThisApi(String url, Integer roleId, Double dlineLength,
 					Integer userId)
 	{
 		for(PermissionNode permissionNode : permissionNodeList)
@@ -237,7 +237,7 @@ public class PermissionServiceImpl implements PermissionInfoService
 					if(allowApiInfo.getUrl().equals(url))
 					{
 						if(ByteBooleanUtils.byte2Boolean(allowApiInfo.getIsCalcLength())
-								&& permissionNode.role.getLength() < lineLength)
+								&& permissionNode.role.getLength() < dlineLength)
 							return false;
 						if(ByteBooleanUtils.byte2Boolean(allowApiInfo.getIsCalcNum()))
 						{

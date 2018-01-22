@@ -44,8 +44,8 @@ public class PermissionFilter implements Filter
 		String path = hreq.getServletPath();
 		String token = hreq.getParameter("token");
 		String slineLength = hreq.getParameter("lineLength");
-		Integer lineLength = (slineLength == null || slineLength.equals("")) ? 
-				0 : Integer.parseInt(slineLength);
+		Double dlineLength = (slineLength == null || slineLength.equals("")) ? 
+				0.0 : Double.parseDouble(slineLength);
 		
 		//黑名单模式，无记录的直接通过
 		if(!permissionServiceImpl.isApiExist(path))
@@ -76,7 +76,7 @@ public class PermissionFilter implements Filter
 				Integer userRoleId = Integer.parseInt(sRole);
 				Integer userId = Integer.parseInt(sUser);
 				if(permissionServiceImpl.isRoleAllowThisApi(path, userRoleId,
-						lineLength, userId))
+						dlineLength, userId))
 				{
 					redisServiceImpl.refreshToken(token);
 					chain.doFilter(req, res);
@@ -86,7 +86,7 @@ public class PermissionFilter implements Filter
 		}
 
 		HttpServletResponse response = (HttpServletResponse) res;
-        response.getWriter().append(new Gson().toJson(ResultBean.permissionDenied()));
+        response.getWriter().write(new Gson().toJson(ResultBean.permissionDenied()));
 	}
 
 	@Override
