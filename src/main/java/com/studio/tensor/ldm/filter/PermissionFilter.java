@@ -66,7 +66,7 @@ public class PermissionFilter implements Filter
 				token = ((LoginResult)(adminBean.getResultBean())).getToken();
 		}
 			
-		if(token != null)
+		if(token != null && !token.equals("null"))
 		{
 			String sUserRoleId = redisServiceImpl.getUserRoleId(token);
 			String sRole = sUserRoleId.split(",")[0];

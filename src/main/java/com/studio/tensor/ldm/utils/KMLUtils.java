@@ -20,7 +20,6 @@ import com.studio.tensor.ldm.bean.DrawKMLBean.LocationBean;
 import com.studio.tensor.ldm.bean.DrawKMLBean.PointBean;
 import com.studio.tensor.ldm.bean.DrawKMLBean.PolygonBean;
 import com.studio.tensor.ldm.bean.DrawKMLBean.PolylineBean;
-import com.studio.tensor.ldm.bean.LatLngInfo;
 
 public class KMLUtils
 {
@@ -61,9 +60,9 @@ public class KMLUtils
 			String sCoor = "";
 			for(LocationBean loc : polygon.coor)
 			{
-				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
-				sCoor += locWgs.getLongitude() + ",";
-				sCoor += locWgs.getLatitude() + ",";
+//				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
+				sCoor += loc.lon + ",";
+				sCoor += loc.lat + ",";
 				sCoor += Math.round(loc.alt) + " ";
 			}
 			linearRing.addElement("coordinates").setText(sCoor);
@@ -81,9 +80,9 @@ public class KMLUtils
 			String sCoor = "";
 			for(LocationBean loc : polyline.coor)
 			{
-				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
-				sCoor += locWgs.getLongitude() + ",";
-				sCoor += locWgs.getLatitude() + ",";
+//				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
+				sCoor += loc.lon + ",";
+				sCoor += loc.lat + ",";
 				sCoor += Math.round(loc.alt) + " ";
 			}
 			lineString.addElement("coordinates").setText(sCoor);
@@ -108,9 +107,9 @@ public class KMLUtils
 			Element pointEle = placeMark.addElement("Point");
 			String sCoor = "";
 			
-			LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(point.coor.lat, point.coor.lon);
-			sCoor += locWgs.getLongitude() + ",";
-			sCoor += locWgs.getLatitude() + ",";
+//			LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(point.coor.lat, point.coor.lon);
+			sCoor += point.coor.lon + ",";
+			sCoor += point.coor.lat + ",";
 			sCoor += Math.round(point.coor.alt) + " ";
 			
 			pointEle.addElement("coordinates").setText(sCoor);

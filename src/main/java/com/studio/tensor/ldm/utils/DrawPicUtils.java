@@ -110,7 +110,8 @@ public class DrawPicUtils
 			int[] ys = new int[polygon.coor.length];
 			for(int i = 0;i < polygon.coor.length;i++)
 			{
-				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polygon.coor[i].lon, polygon.coor[i].lat);
+				LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(polygon.coor[i].lat, polygon.coor[i].lon);
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
 				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
 						/ trueWidth * picWidth);
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
@@ -126,7 +127,8 @@ public class DrawPicUtils
 			int[] ys = new int[polyline.coor.length];
 			for(int i = 0;i < polyline.coor.length;i++)
 			{
-				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polyline.coor[i].lon, polyline.coor[i].lat);
+				LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(polyline.coor[i].lat, polyline.coor[i].lon);
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
 				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
 						/ trueWidth * picWidth);
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
@@ -138,7 +140,8 @@ public class DrawPicUtils
 		
 		for(PointBean point : drawPicBean.point)
 		{
-			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(point.coor.lon, point.coor.lat);
+			LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(point.coor.lat, point.coor.lon);
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
 			drawIcon(gHandle, loc, point, backgroundDrawParam, trueWidth, trueHeight, picWidth, picHeight);
 		}
 		
@@ -146,7 +149,8 @@ public class DrawPicUtils
 				* backgroundDrawParam.leftTopMapParam.z / 6 + 1));
 		for(LabelBean label : drawPicBean.label)
 		{
-			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(label.coor.lon, label.coor.lat);
+			LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(label.coor.lat, label.coor.lon);
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
 			gHandle.setColor(toColorFromString(label.color));
 			gHandle.drawString(label.text, 
 					(int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())

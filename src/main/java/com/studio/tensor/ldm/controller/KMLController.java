@@ -18,7 +18,8 @@ public class KMLController
 	
 	@ResponseBody
 	@RequestMapping("/write")
-	public ResultBean writeKML(String drawKMLBeanJson, String docName, String customerData)
+	public ResultBean writeKML(String drawKMLBeanJson, String docName, 
+			String customerData)
 	{
 		if(customerData == null) customerData = "";
 		
