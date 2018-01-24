@@ -23,7 +23,7 @@ public interface UserInfoService
 	List<UserInfo> getAllUser(Integer start, Integer size);
 	Integer getUserNumber();
 	Boolean userDelete(Integer userId);
-	Boolean userInsert(String phoneNum, String password, Integer roleId);
+	Integer userInsert(String phoneNum, String password, Integer roleId);
 	
 	Boolean userStatusSet(UserStatus userStatus);
 	UserStatus userStatusGet(Integer userId);

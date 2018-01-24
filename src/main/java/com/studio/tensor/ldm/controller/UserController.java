@@ -104,7 +104,9 @@ public class UserController
 	@RequestMapping("/adminAddUser")
 	public ResultBean adminAddUser(String phoneNum, String password, Integer roleId)
 	{
-		return ResultBean.tokenKeyValid(userInfoServiceImpl.userInsert(phoneNum, password, roleId));
+		Integer userId = userInfoServiceImpl.userInsert(phoneNum, password, roleId);
+		if(userId.intValue() == -1) return ResultBean.phoneNumExist();
+		return ResultBean.tokenKeyValid(userId);
 	}
 	
 	@ResponseBody

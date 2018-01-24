@@ -184,16 +184,17 @@ public class UserInfoServiceImpl implements UserInfoService
 	}
 
 	@Override
-	public Boolean userInsert(String phoneNum, String password, Integer roleId)
+	public Integer userInsert(String phoneNum, String password, Integer roleId)
 	{
 		if(userInfoMapper.userPhoneCount(phoneNum) != 0)
-			return false;
+			return -1;
 		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPhoneNumber(phoneNum);
 		userInfo.setPassword(HashUtils.getMD5(password));
 		userInfo.setRoleId(roleId);
-		return userInfoMapper.insertSelective(userInfo) == 1;
+		userInfoMapper.adminInsertSelective(userInfo);
+		return userInfo.getId();
 	}
 
 	@Override
