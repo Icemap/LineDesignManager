@@ -1,11 +1,15 @@
 package com.studio.tensor.ldm.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.studio.tensor.ldm.bean.ResultBean;
 import com.studio.tensor.ldm.pojo.UserStatus;
 import com.studio.tensor.ldm.service.impl.UserInfoServiceImpl;
@@ -125,5 +129,14 @@ public class UserController
 	public ResultBean userStatusGet(Integer userId)
 	{
 		return ResultBean.tokenKeyValid(userInfoServiceImpl.userStatusGet(userId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getByUserIds")
+	public ResultBean getByUserIds(String jsonUserIds)
+	{
+		List<Integer> userIds = new Gson().fromJson(jsonUserIds,
+				new TypeToken<List<Integer>>(){}.getType());
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.getByUserIds(userIds));
 	}
 }

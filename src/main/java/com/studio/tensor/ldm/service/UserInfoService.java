@@ -28,5 +28,6 @@ public interface UserInfoService
 	Boolean userStatusSet(UserStatus userStatus);
 	UserStatus userStatusGet(Integer userId);
 	
+	List<UserInfo> getByUserIds(List<Integer> userIds);
 	Boolean userApiNumPlus(Integer UserId);
 }

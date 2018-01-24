@@ -1,5 +1,6 @@
 package com.studio.tensor.ldm.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -219,6 +220,15 @@ public class UserInfoServiceImpl implements UserInfoService
 		userInfo.setApiNum((userInfo.getApiNum() == null ? 
 				0 : userInfo.getApiNum()) + 1);
 		return userInfoMapper.updateByPrimaryKeySelective(userInfo) == 1;
+	}
+	
+	@Override
+	public List<UserInfo> getByUserIds(List<Integer> userIds)
+	{
+		List<UserInfo> result = new ArrayList<>();
+		for(Integer userId : userIds)
+			result.add(userInfoMapper.selectByPrimaryKey(userId));
+		return result;
 	}
 	
 	public Integer getUserApiNum(Integer userId)
