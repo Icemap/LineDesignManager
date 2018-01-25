@@ -1,6 +1,6 @@
 package com.studio.tensor.ldm.controller;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,18 +155,17 @@ public class PermissionController
 		return ResultBean.tokenKeyValid(permissionServiceImpl.getApiList());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping("/buyForRole")
 	public ResultBean buyForRole(Integer userId, Integer roleId, Integer years)
 	{
-		Date now = new Date();
+		Calendar now = Calendar.getInstance();
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setOrderUserId(userId);
 		orderInfo.setOrderRoleId(roleId);
-		orderInfo.setOrderStartTime(now);
-		now.setYear(now.getYear() + years);
-		orderInfo.setOrderEndTime(now);
+		orderInfo.setOrderStartTime(now.getTime());
+		now.set(Calendar.YEAR, now.get(Calendar.YEAR) + years);
+		orderInfo.setOrderEndTime(now.getTime());
 		permissionServiceImpl.insertOrder(orderInfo);
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
 		userInfo.setRoleId(roleId);
