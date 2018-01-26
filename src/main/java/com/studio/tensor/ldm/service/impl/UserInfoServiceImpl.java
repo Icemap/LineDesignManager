@@ -240,11 +240,11 @@ public class UserInfoServiceImpl implements UserInfoService
 	
 	public Boolean isExpired(Integer userId)
 	{
-		OrderInfo orderInfo = orderInfoMapper.selectByUserId(userId);
-		if(orderInfo == null)
+		List<OrderInfo> orderInfos = orderInfoMapper.selectByUserId(userId);
+		if(orderInfos == null || orderInfos.size() == 0)
 			return true;
 		
-		if(orderInfo.getOrderEndTime().getTime() < new Date().getTime())
+		if(orderInfos.get(0).getOrderEndTime().getTime() < new Date().getTime())
 			return true;
 		else
 			return false;

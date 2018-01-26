@@ -19,7 +19,7 @@ public interface OrderInfoMapper {
 
     int updateByPrimaryKey(OrderInfo record);
 
-    OrderInfo selectByUserId(Integer userId);
+    List<OrderInfo> selectByUserId(Integer userId);
     
     List<OrderInfo> selectAll(
     		@Param("start")Integer start, 
