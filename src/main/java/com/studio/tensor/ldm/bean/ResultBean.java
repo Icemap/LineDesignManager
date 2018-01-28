@@ -12,6 +12,7 @@ public class ResultBean
 	 * 408 : 图片类型不合法
 	 * 409 : 地图类型不合法
 	 * 410 : 生成图片错误
+	 * 411 : 经纬度不在中国区
 	 */
 	
 	private Integer code;
@@ -114,6 +115,14 @@ public class ResultBean
 		ResultBean result = new ResultBean();
 		result.setCode(410);
 		result.setMessage("生成图片错误");
+		return result;
+	}
+	
+	public static ResultBean lonLatError()
+	{
+		ResultBean result = new ResultBean();
+		result.setCode(411);
+		result.setMessage("经纬度不在中国区");
 		return result;
 	}
 	

@@ -169,6 +169,9 @@ public class CalculatorController
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
+			if(CoodUtils.outOfChina(cood.getLatitude(), cood.getLongitude()))
+				return -1;
+			
 			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
 					cood.getLongitude(), cood.getLatitude());
 			pointList.add(new PointBean(covPoint.getLongitude()
@@ -187,6 +190,9 @@ public class CalculatorController
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
+			if(CoodUtils.outOfChina(cood.getLatitude(), cood.getLongitude()))
+				return new ArrayList<>();
+			
 			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
 					cood.getLongitude(), cood.getLatitude());
 			pointList.add(new PointBean(covPoint.getLongitude()
@@ -228,6 +234,9 @@ public class CalculatorController
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
+			if(CoodUtils.outOfChina(cood.getLatitude(), cood.getLongitude()))
+				return new ArrayList<>();
+			
 			LatLngInfo covPoint = CoodUtils.lonLatToMercator(
 					cood.getLongitude(), cood.getLatitude());
 			pointList.add(new PointBean(covPoint.getLongitude()
@@ -269,6 +278,9 @@ public class CalculatorController
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
+			if(CoodUtils.outOfChina(cood.getLatitude(), cood.getLongitude()))
+				return new ArrayList<>();
+			
 			pointList.add(new PointBean(cood.getLongitude()
 					, cood.getLatitude()));
 		}
@@ -287,6 +299,9 @@ public class CalculatorController
 		List<PointBean> pointList = new ArrayList<>();
 		for(LatLngInfo cood : coodList)
 		{
+			if(CoodUtils.outOfChina(cood.getLatitude(), cood.getLongitude()))
+				return new GeoCodeResultBean();
+			
 			LatLngInfo lli = CoodUtils.lonLatToMercator(cood.getLongitude(), cood.getLatitude());
 			pointList.add(new PointBean(lli.getLongitude(), lli.getLatitude()));
 		}
@@ -301,6 +316,9 @@ public class CalculatorController
 	public GeoCodeBean perTowerAutoGeoCode(Double lon, Double lat)
 	{
 		LatLngInfo coodMer = CoodUtils.lonLatToMercator(lon, lat);
+		if(CoodUtils.outOfChina(lat, lon))
+			return new GeoCodeBean();
+		
 		return AMapPointsUtils.getPointGeoCode(coodMer);
 	}
 	

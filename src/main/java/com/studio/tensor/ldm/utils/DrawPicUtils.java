@@ -110,8 +110,7 @@ public class DrawPicUtils
 			int[] ys = new int[polygon.coor.length];
 			for(int i = 0;i < polygon.coor.length;i++)
 			{
-				LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(polygon.coor[i].lat, polygon.coor[i].lon);
-				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polygon.coor[i].lon, polygon.coor[i].lat);
 				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
 						/ trueWidth * picWidth);
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
@@ -127,8 +126,7 @@ public class DrawPicUtils
 			int[] ys = new int[polyline.coor.length];
 			for(int i = 0;i < polyline.coor.length;i++)
 			{
-				LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(polyline.coor[i].lat, polyline.coor[i].lon);
-				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
+				LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(polyline.coor[i].lon, polyline.coor[i].lat);
 				xs[i] = (int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
 						/ trueWidth * picWidth);
 				ys[i] = (int)((loc.getLatitude() - backgroundDrawParam.leftTopMocCood.getLatitude())
@@ -140,8 +138,7 @@ public class DrawPicUtils
 		
 		for(PointBean point : drawPicBean.point)
 		{
-			LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(point.coor.lat, point.coor.lon);
-			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(point.coor.lon, point.coor.lat);
 			drawIcon(gHandle, loc, point, backgroundDrawParam, trueWidth, trueHeight, picWidth, picHeight);
 		}
 		
@@ -149,8 +146,7 @@ public class DrawPicUtils
 				* backgroundDrawParam.leftTopMapParam.z / 6 + 1));
 		for(LabelBean label : drawPicBean.label)
 		{
-			LatLngInfo gcj02Loc = CoodUtils.gps84_To_Gcj02(label.coor.lat, label.coor.lon);
-			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(gcj02Loc.getLongitude(), gcj02Loc.getLatitude());
+			LatLngInfo loc = CoodUtils.lonLatToGoogleMercator(label.coor.lon, label.coor.lat);
 			gHandle.setColor(toColorFromString(label.color));
 			gHandle.drawString(label.text, 
 					(int)((loc.getLongitude() - backgroundDrawParam.leftTopMocCood.getLongitude())
@@ -373,5 +369,44 @@ public class DrawPicUtils
 			result.coverUrl = result.coverUrl.replace("{z}", z + "");
 		}
 		return result;
+	}
+	
+	public static DrawPicBean WGS84toGCJ02(DrawPicBean drawPicBean)
+	{
+		for(PolygonBean poly : drawPicBean.polygon)
+		{
+			for(LocationBean coor : poly.coor)
+			{
+				LatLngInfo gcjLoc = CoodUtils.gps84_To_Gcj02(coor.lat, coor.lon);
+				coor.lat = gcjLoc.getLatitude();
+				coor.lon = gcjLoc.getLongitude();
+			}
+		}
+		
+		for(PolylineBean polyline : drawPicBean.polyline)
+		{
+			for(LocationBean coor : polyline.coor)
+			{
+				LatLngInfo gcjLoc = CoodUtils.gps84_To_Gcj02(coor.lat, coor.lon);
+				coor.lat = gcjLoc.getLatitude();
+				coor.lon = gcjLoc.getLongitude();
+			}
+		}
+
+		for(PointBean point : drawPicBean.point)
+		{
+			LatLngInfo gcjLoc = CoodUtils.gps84_To_Gcj02(point.coor.lat, point.coor.lon);
+			point.coor.lat = gcjLoc.getLatitude();
+			point.coor.lon = gcjLoc.getLongitude();
+		}
+
+		for(LabelBean label : drawPicBean.label)
+		{
+			LatLngInfo gcjLoc = CoodUtils.gps84_To_Gcj02(label.coor.lat, label.coor.lon);
+			label.coor.lat = gcjLoc.getLatitude();
+			label.coor.lon = gcjLoc.getLongitude();
+		}
+		
+		return drawPicBean;
 	}
 }

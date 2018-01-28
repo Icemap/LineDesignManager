@@ -57,6 +57,13 @@ public class DrawController
 		if(bType == null)
 			return ResultBean.mapTypeIllegal();
 		
+		if(bType.equals(BackgroundType.Google_Satellite) || 
+				bType.equals(BackgroundType.Google_Image) ||
+				bType.equals(BackgroundType.Google_Terrain)||
+				bType.equals(BackgroundType.AMap_Satellite)||
+				bType.equals(BackgroundType.AMap_Image))
+			drawPicBean = DrawPicUtils.WGS84toGCJ02(drawPicBean);
+		
 		BufferedImage image = DrawPicUtils.onDraw(drawPicBean, level, bType);
 		String fileName =  new Date().getTime() + "." + picType;
 		try

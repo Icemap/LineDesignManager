@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.studio.tensor.ldm.bean.LoginResult;
@@ -42,6 +43,7 @@ public class PermissionFilter implements Filter
 	{
 		HttpServletRequest hreq = (HttpServletRequest) req;
 		String path = hreq.getServletPath();
+		System.out.print(new Gson().toJson(hreq.getParameterNames()));
 		String token = hreq.getParameter("token");
 		String slineLength = hreq.getParameter("lineLength");
 		Double dlineLength = (slineLength == null || slineLength.equals("")) ? 
