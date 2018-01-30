@@ -3,6 +3,7 @@ package com.studio.tensor.ldm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.studio.tensor.ldm.bean.FileSetting;
@@ -18,8 +19,10 @@ public class KMLController
 	
 	@ResponseBody
 	@RequestMapping("/write")
-	public ResultBean writeKML(String drawKMLBeanJson, String docName, 
-			String customerData)
+	public ResultBean writeKML(
+			@RequestParam("drawKMLBeanJson")String drawKMLBeanJson, 
+			@RequestParam("docName")String docName, 
+			@RequestParam(value = "customerData", required = false)String customerData)
 	{
 		if(customerData == null) customerData = "";
 		

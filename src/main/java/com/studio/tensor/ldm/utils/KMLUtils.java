@@ -27,7 +27,7 @@ public class KMLUtils
 			String docName, String filePath, String customerData)
 	{
 		DrawKMLBean dpb = new Gson().fromJson(drawKMLBeanJson, DrawKMLBean.class);
-		dpb = readAlt(dpb);
+//		dpb = readAlt(dpb);
 		Document document = DocumentHelper.createDocument();
 		Element kmlRoot = document.addElement("kml");
 		kmlRoot.addAttribute("xmlns", "http://www.opengis.net/kml/2.2");
@@ -63,7 +63,7 @@ public class KMLUtils
 //				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
 				sCoor += loc.lon + ",";
 				sCoor += loc.lat + ",";
-				sCoor += Math.round(loc.alt) + " ";
+				sCoor += Math.round(loc.alt == null ? 0 : loc.alt) + " ";
 			}
 			linearRing.addElement("coordinates").setText(sCoor);
 		}
@@ -83,7 +83,7 @@ public class KMLUtils
 //				LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(loc.lat, loc.lon);
 				sCoor += loc.lon + ",";
 				sCoor += loc.lat + ",";
-				sCoor += Math.round(loc.alt) + " ";
+				sCoor += Math.round(loc.alt == null ? 0 : loc.alt) + " ";
 			}
 			lineString.addElement("coordinates").setText(sCoor);
 		}
@@ -91,7 +91,7 @@ public class KMLUtils
 		for(PointBean point : dpb.point)
 		{
 			Element placeMark = rootDoc.addElement("Placemark");
-			placeMark.addElement("name").setText(point.name);
+			placeMark.addElement("name").setText(point.name == null ? "" : point.name);
 			Element style = placeMark.addElement("Style");
 			
 			Element iconStyle = style.addElement("IconStyle");
@@ -110,7 +110,7 @@ public class KMLUtils
 //			LatLngInfo locWgs = CoodUtils.gcj_To_Gps84(point.coor.lat, point.coor.lon);
 			sCoor += point.coor.lon + ",";
 			sCoor += point.coor.lat + ",";
-			sCoor += Math.round(point.coor.alt) + " ";
+			sCoor += Math.round(point.coor.alt == null ? 0 : point.coor.alt) + " ";
 			
 			pointEle.addElement("coordinates").setText(sCoor);
 		}
@@ -177,7 +177,7 @@ public class KMLUtils
 		params.put("linesJson", linesJson);
 		params.put("f", "json");
 		
-		String respJson = HttpUtils.URLGet("http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/calcSlope"
+		String respJson = HttpUtils.URLPost("http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/calcSlope"
 				, params, HttpUtils.URL_PARAM_DECODECHARSET_UTF8);
 		RespJsonBean respBean = new Gson().fromJson(respJson, RespJsonBean.class);
 		return setAllLoc(srcKMLBean, respBean.results);
