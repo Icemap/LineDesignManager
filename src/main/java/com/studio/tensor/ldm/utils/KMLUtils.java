@@ -1,8 +1,7 @@
 package com.studio.tensor.ldm.utils;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,10 +116,10 @@ public class KMLUtils
 		
 		try 
 		{  
-		    Writer fileWriter=new FileWriter(filePath);  
+			FileOutputStream fileOutputStream= new FileOutputStream(filePath);  
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			format.setEncoding("UTF-8");
-			XMLWriter xmlWriter=new XMLWriter(fileWriter,format);  
+			XMLWriter xmlWriter=new XMLWriter(fileOutputStream, format);  
 			
 			xmlWriter.write(document);  
 			xmlWriter.close();   
@@ -167,6 +166,7 @@ public class KMLUtils
 		return "88" + kmlColor;
 	}
 
+	@SuppressWarnings("unused")
 	private static DrawKMLBean readAlt(DrawKMLBean srcKMLBean)
 	{
 		List<Double[][]> locReqList = getAllLoc(srcKMLBean);
