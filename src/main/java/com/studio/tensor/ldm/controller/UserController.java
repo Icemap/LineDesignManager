@@ -141,4 +141,11 @@ public class UserController
 				new TypeToken<List<Integer>>(){}.getType());
 		return ResultBean.tokenKeyValid(userInfoServiceImpl.getByUserIds(userIds));
 	}
+	
+	@ResponseBody
+	@RequestMapping("/getRoleAndOrder")
+	public ResultBean getRoleAndOrder(String token)
+	{
+		return ResultBean.tokenKeyValid(userInfoServiceImpl.getRoleAndOrder(token));
+	}
 }

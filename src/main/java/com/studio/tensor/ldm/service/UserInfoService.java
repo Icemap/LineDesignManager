@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.studio.tensor.ldm.bean.ResultBean;
+import com.studio.tensor.ldm.bean.RoleAndOrder;
 import com.studio.tensor.ldm.pojo.UserInfo;
 import com.studio.tensor.ldm.pojo.UserStatus;
 
@@ -30,4 +31,6 @@ public interface UserInfoService
 	
 	List<UserInfo> getByUserIds(List<Integer> userIds);
 	Boolean userApiNumPlus(Integer UserId);
+	
+	RoleAndOrder getRoleAndOrder(String token);
 }

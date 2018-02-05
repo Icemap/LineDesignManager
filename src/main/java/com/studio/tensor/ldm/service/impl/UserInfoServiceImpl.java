@@ -1,6 +1,7 @@
 package com.studio.tensor.ldm.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.studio.tensor.ldm.bean.FileSetting;
 import com.studio.tensor.ldm.bean.LoginResult;
 import com.studio.tensor.ldm.bean.ResultBean;
+import com.studio.tensor.ldm.bean.RoleAndOrder;
 import com.studio.tensor.ldm.dao.OrderInfoMapper;
 import com.studio.tensor.ldm.dao.RoleInfoMapper;
 import com.studio.tensor.ldm.dao.UserInfoMapper;
@@ -55,7 +57,7 @@ public class UserInfoServiceImpl implements UserInfoService
 		RoleInfo roleinfo = roleInfoMapper.selectDefaultRole();
 
 		if(userInfo == null)
-			return ResultBean.tokenKeyNotValid();
+			return ResultBean.userNotExist();
 		
 		if(!userInfo.getRoleId().equals(roleinfo.getId()) && isExpired(userInfo.getId()))
 		{
@@ -114,9 +116,18 @@ public class UserInfoServiceImpl implements UserInfoService
 		userInfo.setPassword(HashUtils.getMD5(password));
 		userInfo.setRoleId(0);
 		userInfo.setApiNum(0);
+		userInfoMapper.insertSelective(userInfo);
 		
-		return ResultBean.tokenKeyValid(
-				userInfoMapper.insertSelective(userInfo) == 1);
+		//公测
+		OrderInfo orderInfo = new OrderInfo();
+		Calendar now = Calendar.getInstance();
+		orderInfo.setOrderRoleId(roleInfoMapper.selectDefaultRole().getId());
+		orderInfo.setOrderUserId(userInfo.getId());
+		orderInfo.setOrderStartTime(now.getTime());
+		now.set(Calendar.MONTH, now.get(Calendar.MONTH) + 1);
+		orderInfo.setOrderEndTime(now.getTime());
+		
+		return ResultBean.tokenKeyValid(true);
 	}
 
 	@Override
@@ -248,5 +259,23 @@ public class UserInfoServiceImpl implements UserInfoService
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public RoleAndOrder getRoleAndOrder(String token)
+	{
+		RoleAndOrder result = new RoleAndOrder();
+		
+		String userRole = redisServiceImpl.getUserRoleId(token);
+		List<OrderInfo> orderList = orderInfoMapper.selectByUserId(
+				Integer.parseInt(userRole.split(",")[1]));
+		if(orderList == null || orderList.size() == 0)
+			result.orderInfo = null;
+		else
+			result.orderInfo = orderList.get(0);
+		
+		result.roleInfo = roleInfoMapper.selectByPrimaryKey(
+				Integer.parseInt(userRole.split(",")[0]));
+		return result;
 	}
 }

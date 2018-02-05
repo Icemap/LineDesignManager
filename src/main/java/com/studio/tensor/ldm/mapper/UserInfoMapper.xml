@@ -57,7 +57,8 @@
       #{roleId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{iconUrl,jdbcType=VARCHAR}, #{apiNum,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo">
+  <insert id="insertSelective" parameterType="com.studio.tensor.ldm.pojo.UserInfo"
+  	useGeneratedKeys="true" keyProperty="id" >
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

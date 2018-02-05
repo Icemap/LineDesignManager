@@ -121,8 +121,8 @@ public class KMLUtils
 			format.setEncoding("UTF-8");
 			XMLWriter xmlWriter=new XMLWriter(fileOutputStream, format);  
 			
-			xmlWriter.write(document);  
-			xmlWriter.close();   
+			xmlWriter.write(document);
+			xmlWriter.close();
 		} 
 		catch (IOException e) 
 		{  
