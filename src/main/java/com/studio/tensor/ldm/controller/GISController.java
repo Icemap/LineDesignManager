@@ -125,4 +125,22 @@ public class GISController
 				"http://120.78.205.53:6080/arcgis/rest/services/chinaDEM/ImageServer/exts/contourSOE/calcSlope",
 				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
 	}
+	
+	@ResponseBody
+	@RequestMapping("/arcgis/rest/services/ztsj/MapServer/exts/ztsj/ztsjIdentify")
+	public void calcSlope(HttpServletResponse response,
+			String points,String types, String yearlevel, String f) throws IOException
+	{
+		Map<String, String> params = new HashMap<>();
+		params.put("points", points);
+		params.put("types", types);
+		params.put("yearlevel", yearlevel);
+		params.put("f", f);
+
+	    response.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(LongWaitHttpUtils.URLGet(
+				"http://120.78.205.53:6080/arcgis/rest/services/ztsj/MapServer/exts/ztsj/ztsjIdentify",
+				params, LongWaitHttpUtils.URL_PARAM_DECODECHARSET_UTF8));
+	}
 }
