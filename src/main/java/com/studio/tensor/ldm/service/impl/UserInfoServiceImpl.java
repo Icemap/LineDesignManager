@@ -164,7 +164,8 @@ public class UserInfoServiceImpl implements UserInfoService
 		Boolean isCompare = smsServiceImpl.compareRegisterCode(phoneNum, confirmCode);
 		if(!isCompare) return ResultBean.tokenKeyNotValid();
 		
-		return ResultBean.tokenKeyValid(userInfoMapper.updatePasswordByPhone(phoneNum, newPassword) == 1);
+		return ResultBean.tokenKeyValid(userInfoMapper.updatePasswordByPhone(phoneNum, 
+				HashUtils.getMD5(newPassword)) == 1);
 	}
 
 	@Override
