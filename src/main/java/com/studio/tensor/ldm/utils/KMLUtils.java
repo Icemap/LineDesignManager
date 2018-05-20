@@ -47,7 +47,7 @@ public class KMLUtils
 			Element style = placeMark.addElement("Style");
 			Element lineStyle = style.addElement("LineStyle");
 			lineStyle.addElement("color").setText(normalColor2KMLColor(polygon.color));
-			lineStyle.addElement("width").setText("1");
+			lineStyle.addElement("width").setText("3");
 			Element polyStyle = style.addElement("PolyStyle");
 			polyStyle.addElement("color").setText(normalColor2TransKMLColor(polygon.color));
 			polyStyle.addElement("fill").setText("1");
@@ -74,7 +74,7 @@ public class KMLUtils
 			Element style = placeMark.addElement("Style");
 			Element lineStyle = style.addElement("LineStyle");
 			lineStyle.addElement("color").setText(normalColor2KMLColor(polyline.color));
-			lineStyle.addElement("width").setText("1");
+			lineStyle.addElement("width").setText("3");
 			Element lineString = placeMark.addElement("LineString");
 			String sCoor = "";
 			for(LocationBean loc : polyline.coor)
