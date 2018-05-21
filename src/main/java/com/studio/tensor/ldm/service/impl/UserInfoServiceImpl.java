@@ -106,7 +106,9 @@ public class UserInfoServiceImpl implements UserInfoService
 	}
 	
 	@Override
-	public ResultBean userRegister(String phoneNum, String password, String code)
+	public ResultBean userRegister(String phoneNum, 
+			String password, String code, String companyName,
+			String realName)
 	{
 		if(!smsServiceImpl.compareRegisterCode(phoneNum, code))
 			return ResultBean.tokenKeyNotValid();
@@ -114,8 +116,11 @@ public class UserInfoServiceImpl implements UserInfoService
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPhoneNumber(phoneNum);
 		userInfo.setPassword(HashUtils.getMD5(password));
+		userInfo.setCompanyName(companyName);
+		userInfo.setRealName(realName);
 		userInfo.setRoleId(0);
 		userInfo.setApiNum(0);
+		userInfo.setRegisterTime(new Date());
 		userInfoMapper.insertSelective(userInfo);
 		
 		//公测
@@ -278,5 +283,16 @@ public class UserInfoServiceImpl implements UserInfoService
 		result.roleInfo = roleInfoMapper.selectByPrimaryKey(
 				Integer.parseInt(userRole.split(",")[0]));
 		return result;
+	}
+
+	@Override
+	public ResultBean userUpdateCompanyAndRealName(Integer id, String companyName, String realName)
+	{
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(id);
+		userInfo.setRealName(realName);
+		userInfo.setCompanyName(companyName);
+		return ResultBean.tokenKeyValid(userInfoMapper.
+				updateByPrimaryKeySelective(userInfo));
 	}
 }

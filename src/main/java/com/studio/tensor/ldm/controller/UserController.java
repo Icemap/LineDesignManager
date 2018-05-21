@@ -37,9 +37,21 @@ public class UserController
 	
 	@ResponseBody
 	@RequestMapping("/register")
-	public ResultBean userRegister(String phoneNum, String password, String code)
+	public ResultBean userRegister(String phoneNum, 
+			String password, String code ,
+			String realName, String companyName)
 	{
-		return userInfoServiceImpl.userRegister(phoneNum, password, code);
+		return userInfoServiceImpl.userRegister(phoneNum,
+				password, code, companyName, realName);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/companyNameAndRealName/update")
+	public ResultBean userUpdateNickName(Integer id, 
+			String realName, String companyName)
+	{
+		return userInfoServiceImpl.userUpdateCompanyAndRealName(
+				id, companyName, realName);
 	}
 	
 	@ResponseBody
